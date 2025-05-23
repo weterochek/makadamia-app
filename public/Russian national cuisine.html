@@ -333,6 +333,13 @@
   </div>
 </nav>  
     <script src="script.js"></script>
+<script>window.addEventListener("load", () => {
+    if (typeof checkAuthStatus === "function") {
+      console.log("[страница X] вызов checkAuthStatus при полной загрузке");
+      checkAuthStatus();
+    }
+  });
+</script>
 </body>
 </html>
 
