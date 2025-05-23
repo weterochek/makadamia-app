@@ -312,6 +312,14 @@ if (Math.abs(deltaX) > 50) {
     slider.style.transform = `translateX(${-1 * 100}%)`; // Начинаем с первого оригинального слайда
   }, 0);
 });
+	      window.addEventListener('load', () => {
+    console.log("💡 [index.html] вызов checkAuthStatus при полной загрузке");
+    if (typeof checkAuthStatus === 'function') {
+      checkAuthStatus();
+    } else {
+      console.warn("❌ checkAuthStatus не определена");
+    }
+  });
 </script>
 
  
