@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<link rel="apple-touch-icon" sizes="180x180" href="images/орех180.png"> 
+<link rel="icon" sizes="32x32" href="images/орех32.png" type="image/png"> 
+<link rel="icon" sizes="16x16" href="images/орех16.png" type="image/png"> 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Личный кабинет</title>
+  <link rel="stylesheet" href="styless.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<header>
+        <nav>
+            <div class="navbar-center">
+                <a href="index.html"><img src="images/logo.png" alt="Logo" class="navbar-logo"></a>
+            </div>
+        </nav>
+<div class="main-content">
+    <div class="account-container">
+        <h2>Личный кабинет</h2>
+        <p>Пользователь: <span id="usernameDisplay">Загрузка...</span></p>
+        <p><label>Имя: <input id="nameInput" type="text" disabled> 
+          <button id="editName">Редактировать</button> 
+          <button id="saveName" style="display:none;">Сохранить</button></label></p>
+
+        <p><label>Город: <input id="cityInput" type="text" disabled> 
+          <button id="editCity">Редактировать</button> 
+          <button id="saveCity" style="display:none;">Сохранить</button></label></p>
+        <p><button onclick="logout()">Выйти</button></p>
+    </div>
+
+    <h2>Ваши заказы</h2>
+    <button id="toggleHistoryBtn">Показать историю заказов</button>
+    <div id="ordersHistory" style="display: none;">
+        <div id="ordersContainer">
+            <div class="no-orders" id="noOrdersMessage">У вас еще нет заказов.</div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="footer-links">
+        <div class="footer-item">
+            <h3>Политика конфиденциальности</h3>
+            <p>Национальные Блюда © 2025</p>
+	    <h3>Контакты</h3>
+            <p>Телефон: +7 (xxx) xxx-xx-xx</p>
+            <p>Email: ssajt431@gmail.com</p>
+        </div>
+    </div>
+</footer>
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <img id="homeIcon" src="images/free-icon-home-1946488.png" alt="Главная" />
+    <span>Главная</span>
+  </a>
+  <a href="Review.html" class="nav-item">
+    <img id="reviewsIcon" src="images/free-icon-good-feedback-3594679.png" alt="Отзывы" />
+    <span>Отзывы</span>
+  </a>
+  <a href="#" class="nav-item" id="cartButton">
+    <img id="cartIcon" src="images/free-icon-basket-7087821.png" alt="Корзина" />
+    <span>Корзина</span>
+  </a>
+  <a href="#" class="nav-item" id="authButton" onclick="handleAuthClick()">
+    <img id="authIcon" src="images/free-icon-avatar-6386976.png" alt="Вход" />
+    <span>Вход</span>
+  </a>
+
+  <a href="#" class="nav-item" id="cabinetButton" onclick="openCabinet()" style="display: none;">
+    <img id="cabinetIcon" src="images/free-icon-avatar-6386976.png" alt="Кабинет" />
+    <span>Кабинет</span>
+  </a>
+
+  <div id="cartDropdown" class="cart-dropdown">
+    <h3>Ваша Корзина</h3>
+    <div id="cartItems"></div>
+    <p id="totalAmount"></p>
+    <button onclick="goToCheckoutPage()">К Оформлению заказа</button>
+    <button id="clear-cart" class="clear-cart">Очистить корзину</button>
+  </div>
+</nav>
+<script src="script.js"></script>
+</body>
+</html>

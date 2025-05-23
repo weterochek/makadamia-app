@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+     <style>
+    .order {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.order h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.order p {
+    margin: 5px 0;
+}
+
+.order ul {
+    list-style: none;
+    padding: 0;
+}
+
+.order ul li {
+    padding: 5px 0;
+    border-bottom: 1px dashed #ccc;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои заказы</title>
+    <style>
+        /* Стили для отображения заказов */
+        .order {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+        .order p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Заказы</h1>
+    <div id="noOrdersMessage" style="display:none;">
+        <p>Заказов нету.</p>
+    </div>
+    <div id="ordersContainer">
+        <!-- Здесь будут отображаться заказы -->
+    </div>   
+    <script src="orders.js"></script>
+</body>
+</html>

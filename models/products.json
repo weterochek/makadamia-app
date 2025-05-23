@@ -1,0 +1,362 @@
+[
+  {
+    "_id": "67dd4b30fd98cf5346a1ec63",
+    "name": "Борщ",
+    "price": 380
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec64",
+    "name": "Рассольник",
+    "price": 390
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec65",
+    "name": "Щи",
+    "price": 350
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec66",
+    "name": "Солянка",
+    "price": 420
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec67",
+    "name": "Окрошка",
+    "price": 370
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec68",
+    "name": "Пельмени",
+    "price": 300
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec69",
+    "name": "Оладьи",
+    "price": 220
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec6a",
+    "name": "Курник",
+    "price": 260
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec6b",
+    "name": "Пирожки",
+    "price": 140
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec6c",
+    "name": "Ватрушка",
+    "price": 120
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec6d",
+    "name": "Кисель",
+    "price": 110
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec6e",
+    "name": "Квас",
+    "price": 140
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec6f",
+    "name": "Буйабес",
+    "price": 530
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec70",
+    "name": "Луковый суп",
+    "price": 430
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec71",
+    "name": "Бланкет из телятены",
+    "price": 390
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec72",
+    "name": "Беф",
+    "price": 430
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec73",
+    "name": "Рататуй",
+    "price": 440
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec74",
+    "name": "Фуа гра",
+    "price": 480
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec75",
+    "name": "Кок-о-вен",
+    "price": 480
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec76",
+    "name": "Тар тар",
+    "price": 400
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec77",
+    "name": "Тарт татен",
+    "price": 310
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec78",
+    "name": "Профитроли",
+    "price": 310
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec79",
+    "name": "Белое вино",
+    "price": 5050
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec7a",
+    "name": "Красное вино",
+    "price": 8900
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec7b",
+    "name": "Гаспачо",
+    "price": 460
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec7c",
+    "name": "Паэлья",
+    "price": 540
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec7d",
+    "name": "Косидо",
+    "price": 430
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec7e",
+    "name": "Мигас",
+    "price": 420
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec7f",
+    "name": "Писто",
+    "price": 420
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec80",
+    "name": "Треска Пиль Пиль",
+    "price": 360
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec81",
+    "name": "Тако",
+    "price": 280
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec82",
+    "name": "Эмпанда",
+    "price": 330
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec83",
+    "name": "Папас арргадас",
+    "price": 270
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec84",
+    "name": "Кальсотада",
+    "price": 250
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec85",
+    "name": "Сангрия",
+    "price": 270
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec86",
+    "name": "Тинто де верано",
+    "price": 270
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec87",
+    "name": "Харчо",
+    "price": 340
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec88",
+    "name": "Чанахи",
+    "price": 330
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec89",
+    "name": "Чихиртма",
+    "price": 330
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec8a",
+    "name": "Сациви",
+    "price": 300
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec8b",
+    "name": "Чахокбили",
+    "price": 300
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec8c",
+    "name": "Чкмерули",
+    "price": 280
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec8d",
+    "name": "Мцвали",
+    "price": 300
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec8e",
+    "name": "Хинкали",
+    "price": 370
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec8f",
+    "name": "Пхали",
+    "price": 300
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec90",
+    "name": "Хачапури",
+    "price": 350
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec91",
+    "name": "Тархун",
+    "price": 130
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec92",
+    "name": "Чача",
+    "price": 230
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec93",
+    "name": "Тальятелли",
+    "price": 460
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec94",
+    "name": "Спагетти Карбонара",
+    "price": 480
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec95",
+    "name": "Лазанья",
+    "price": 470
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec96",
+    "name": "Тортеллини в бульоне",
+    "price": 420
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec97",
+    "name": "Пармиджано",
+    "price": 420
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec98",
+    "name": "Карпачо",
+    "price": 430
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec99",
+    "name": "Риболлита",
+    "price": 400
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec9a",
+    "name": "Неаполитанская пицца",
+    "price": 450
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec9b",
+    "name": "Ризотто",
+    "price": 270
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec9c",
+    "name": "Тирамису",
+    "price": 250
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec9d",
+    "name": "Эспрессо",
+    "price": 270
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec9e",
+    "name": "Граппа",
+    "price": 270
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ec9f",
+    "name": "Суши",
+    "price": 320
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1eca0",
+    "name": "Рамен",
+    "price": 450
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1eca1",
+    "name": "Курица Терияки",
+    "price": 340
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1eca2",
+    "name": "Такояки",
+    "price": 380
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1eca3",
+    "name": "Удон",
+    "price": 390
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1eca4",
+    "name": "Окономияки",
+    "price": 350
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1eca5",
+    "name": "Соба",
+    "price": 420
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1eca6",
+    "name": "Карэ рис",
+    "price": 450
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1eca7",
+    "name": "Шабу-шабу",
+    "price": 480
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1eca8",
+    "name": "Моти",
+    "price": 310
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1eca9",
+    "name": "Митараши данго",
+    "price": 290
+  },
+  {
+    "_id": "67dd4b30fd98cf5346a1ecaa",
+    "name": "Зеленый листовой чай",
+    "price": 230
+  }
+]

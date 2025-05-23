@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отзывы</title>
+    <link rel="stylesheet" href="styleses.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<header>
+        <nav>
+            <div class="navbar-center">
+                <a href="index.html"><img src="images/logo.png" alt="Logo" class="navbar-logo"></a>
+            </div>
+        </nav>
+    </header>
+    <div class="review-container">
+        <h2>Отзывы</h2>
+        <p>Оставьте свой отзыв</p>
+
+        <form id="reviewForm">
+<label for="ratingStars">Рейтинг:</label>
+<div class="rating-stars" id="ratingStars">
+  <i class="fas fa-star" data-value="1"></i>
+  <i class="fas fa-star" data-value="2"></i>
+  <i class="fas fa-star" data-value="3"></i>
+  <i class="fas fa-star" data-value="4"></i>
+  <i class="fas fa-star" data-value="5"></i>
+</div>
+<input type="hidden" id="starRating" name="rating" value="0">
+
+            <label for="displayName">Имя (необязательно):</label>
+            <input type="text" id="displayName" placeholder="Ваше имя (или оставьте пустым)">
+
+            <label for="comment">Комментарий:</label>
+            <textarea  id="comment" rows="1" placeholder="Введите ваш отзыв..." required></textarea>
+
+            <button type="submit" id="submitReview" class="submit-button">Отправить</button>
+        </form>
+
+        <h3>Фильтр отзывов:</h3>
+        <div class="review-filters">
+            <div>
+                <label for="filterStars">Фильтр по звёздам:</label>
+                <select id="filterStars">
+                    <option value="all">Все</option>
+                    <option value="5">5 ★</option>
+                    <option value="4">4 ★</option>
+                    <option value="3">3 ★</option>
+                    <option value="2">2 ★</option>
+                    <option value="1">1 ★</option>
+                </select>
+            </div>
+            <div>
+                <label for="filterDate">Фильтр по дате:</label>
+                <select id="filterDate">
+                    <option value="newest">Сначала новые</option>
+                    <option value="oldest">Сначала старые</option>
+                </select>
+            </div>
+        </div>
+        
+        <div id="reviewContainer"></div>
+        
+        <!-- Добавляем пагинацию -->
+        <div class="review-pagination">
+            <button class="page-btn" aria-label="Previous">←</button>
+            <button class="page-btn" aria-label="Next">→</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <div class="footer-item">
+                <h3>Политика конфиденциальности</h3>
+                <p>Национальные Блюда © 2025</p>
+            <h3>Контакты</h3>
+                <p>Телефон: +7 (xxx) xxx-xx-xx</p>
+                <p>Email: ssajt431@gmail.com</p>
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('reviewForm').addEventListener('submit', submitReview);
+        document.addEventListener('DOMContentLoaded', loadReviews);
+    </script>
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <img id="homeIcon" src="images/free-icon-home-1946488.png" alt="Главная" />
+    <span>Главная</span>
+  </a>
+  <a href="Review.html" class="nav-item">
+    <img id="reviewsIcon" src="images/free-icon-good-feedback-3594679.png" alt="Отзывы" />
+    <span>Отзывы</span>
+  </a>
+  <a href="#" class="nav-item" id="cartButton">
+    <img id="cartIcon" src="images/free-icon-basket-7087821.png" alt="Корзина" />
+    <span>Корзина</span>
+  </a>
+  <a href="#" class="nav-item" id="authButton" onclick="handleAuthClick()">
+    <img id="authIcon" src="images/free-icon-avatar-6386976.png" alt="Вход" />
+    <span>Вход</span>
+  </a>
+
+  <a href="#" class="nav-item" id="cabinetButton" onclick="openCabinet()" style="display: none;">
+    <img id="cabinetIcon" src="images/free-icon-avatar-6386976.png" alt="Кабинет" />
+    <span>Кабинет</span>
+  </a>
+
+  <div id="cartDropdown" class="cart-dropdown">
+    <h3>Ваша Корзина</h3>
+    <div id="cartItems"></div>
+    <p id="totalAmount"></p>
+    <button onclick="goToCheckoutPage()">К Оформлению заказа</button>
+    <button id="clear-cart" class="clear-cart">Очистить корзину</button>
+  </div>
+</nav>
+</body>
+</html>

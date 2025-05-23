@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<link rel="apple-touch-icon" sizes="180x180" href="images/орех180.png"> 
+<link rel="icon" sizes="32x32" href="images/орех32.png" type="image/png"> 
+<link rel="icon" sizes="16x16" href="images/орех16.png" type="image/png"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа</title>
+    <link rel="stylesheet" href="stl.css">
+</head>
+<body>
+    <header>
+        <h1>Оформление заказа</h1>
+    </header>
+    <main>
+        <section id="customerDetails">
+            <form id="checkoutForm">
+                <!-- Раздел с заказом -->
+                <div id="orderSummary">
+                    <h2>Ваш заказ</h2>
+                    <div class="order-container">
+                        <div id="cartItems" class="cart-items-container"></div>
+                        <div class="order-total">
+                            <p id="totalAmount" class="total-amount"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Раздел с информацией о клиенте -->
+                <div class="customer-info">
+                    <h2>Информация о доставке</h2>
+                    
+                    <div class="form-group">
+                        <label for="customerName">Имя:</label>
+                        <input type="text" id="customerName" name="customerName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerAddress">Адрес доставки:</label>
+                        <input type="text" id="customerAddress" name="customerAddress" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="deliveryTime">Дата и время доставки:</label>
+                        <input type="datetime-local" id="deliveryTime" name="deliveryTime">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additionalInfo">Дополнительная информация:</label>
+                        <textarea id="additionalInfo" name="additionalInfo" placeholder="Особые пожелания к заказу или доставке (необязательно)"></textarea>
+                    </div>
+                </div>
+
+                <!-- Кнопки управления -->
+                <div class="form-buttons">
+                    <button type="button" id="backToShopping" class="secondary-button">Вернуться к покупкам</button>
+                    <button type="submit" class="primary-button">Оформить заказ</button>
+                </div>
+            </form>
+        </section>
+    </main>
+    <script src="checkout.js"></script>
+</body>
+</html>

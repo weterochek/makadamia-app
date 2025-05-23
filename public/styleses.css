@@ -1,0 +1,1004 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 60px;
+}
+.rating-stars {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+input[type="text"],
+textarea {
+  border: 1px solid #ccc;
+  border-radius: 12px;      /* ← вот тут скругление */
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  border-color: #999;
+}
+.rating-stars i {
+  font-size: 24px;
+  color: #ccc;
+  transition: color 0.2s;
+}
+
+.rating-stars i.selected {
+  color: #FFD700; /* золотой */
+}
+
+#reviewContainer {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#reviewContainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+#reviewContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#reviewContainer::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
+.review {
+    width: 100%;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f0f0f0;
+    box-sizing: border-box;
+    transition: transform 0.2s ease;
+}
+
+.review:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.review-author {
+    font-weight: bold;
+    color: #333;
+}
+
+.review-date {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.review-rating {
+    color: #ffd700;
+    font-size: 1.1rem;
+    margin: 8px 0;
+}
+
+.review-text {
+    color: #444;
+    line-height: 1.6;
+}
+
+#filterStars, #filterDate {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+#filterStars:focus, #filterDate:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+.review-filters {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 15px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.review-filters > div {
+    flex: 1;
+    min-width: 200px;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid #ccc;
+  padding: 6px 0;
+  box-shadow: 0 -2px 9px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.bottom-nav .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #222;
+  font-size: 14px; /* Больше текст */
+}
+
+.bottom-nav .nav-item img {
+  width: 28px;  /* Больше иконки */
+  height: 28px;
+  margin-bottom: 4px;
+}
+
+.bottom-nav .nav-item span {
+  font-size: 13px;
+  line-height: 1.2;
+}
+.bottom-nav .nav-item img.active-icon {
+  transform: scale(1.25);
+  transition: transform 0.2s ease;
+}
+
+/* Стили для пагинации */
+.review-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 200px; /* Увеличиваем отступ от подвала */
+    width: 100%;
+    position: relative;
+    z-index: 5;
+}
+
+.page-btn {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 8px 15px;
+    min-width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.page-btn.active {
+    background-color: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.page-btn:hover:not(:disabled) {
+    background-color: #f8f9fa;
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Стрелки пагинации */
+.page-btn[aria-label="Previous"],
+.page-btn[aria-label="Next"] {
+    background: #fff;
+    border: 1px solid #ddd;
+}
+
+.page-btn[aria-label="Previous"]:hover,
+.page-btn[aria-label="Next"]:hover {
+    background-color: #f8f9fa;
+    border-color: #28a745;
+    color: #28a745;
+}
+
+/* Обновляем стили контейнера отзывов */
+.review-container {
+    padding: 20px;
+    padding-top: 100px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+}
+
+#reviewContainer {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    width: 100%;
+    margin-top: auto; /* Привязываем к низу */
+    position: relative; /* Убираем fixed */
+    z-index: 10;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-item {
+    flex: 1;
+    min-width: 250px;
+    text-align: center;
+}
+
+.footer-item h3 {
+    color: #fff;
+    font-size: 0.8em;
+}
+
+.footer-item p {
+    color: #ddd;
+    margin: 5px 0;
+    line-height: 1.5;
+    font-size: 0.65em;
+}
+
+@media (max-width: 768px) {
+    .footer-links {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+/* Медиа-запросы для мобильных устройств */
+@media (max-width: 768px) {
+    .review-container {
+        padding: 15px;
+        padding-top: 80px;
+    }
+
+    #reviewContainer {
+        padding: 15px;
+    }
+
+    .review {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .review-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .review-date {
+        font-size: 0.8rem;
+    }
+
+    .page-btn {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .review-container {
+        padding: 10px;
+        padding-top: 70px;
+    }
+
+    #reviewContainer {
+        padding: 10px;
+    }
+
+    .review {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .review-text {
+        font-size: 0.85rem;
+    }
+
+    #filterStars, #filterDate {
+        padding: 8px;
+        font-size: 13px;
+    }
+}
+
+.review-form-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.review-form-container h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.rating-container {
+    margin-bottom: 1.5rem;
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #ffd700;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 0.7rem;
+    margin-top: 20px;
+    background-color: #9c9c9c;
+    border: none;
+    color: white;
+    border-radius: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+    background-color: #9c9c9c;
+}
+
+/* Стили для списка отзывов */
+.reviews-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.reviews-container h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.error {
+    color: #dc3545;
+    text-align: center;
+    padding: 1rem;
+    background-color: #f8d7da;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+
+#reviewName {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+/* Header Navigation */
+header nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 60px; /* Фиксированная высота */
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+}
+@media (max-width: 480px) {
+    .navbar.active {
+        justify-content: space-evenly;
+    }
+}
+@media (max-width: 768px){
+    
+     .navbar.active {
+        justify-content: space-evenly;   
+    }
+}
+.navbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+}
+
+.navbar-logo {
+    height: 35px; /* Фиксированная высота логотипа */
+    width: auto;
+    display: block;
+}
+
+.nav-item {
+    position: relative;
+    text-decoration: none;
+    color: black;
+    font-size: 1.2em;
+    padding: 0;
+    transition: color 0.3s ease;
+}
+
+.nav-item::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: black;
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+.nav-item:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+/* Mobile Menu */
+.navbar {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+.navbar.active {
+    display: flex;
+}
+
+.menu-toggle {
+    font-size: 1.8rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin-top: -5px;
+    z-index: 1001;
+    color: #000;
+}
+
+.close-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    z-index: 1002;
+}
+
+/* Cart */
+
+
+.cart-icon {
+    font-size: 1.6rem;
+    color: #000;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+    header nav {
+        padding: 5px 15px;
+    }
+
+    .menu-toggle {
+        font-size: 1.8rem;
+        margin-left: 0;
+    }
+
+    .cart-icon {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header nav {
+        padding: 5px 10px;
+    }
+
+}
+
+/* Стили для мобильного меню */
+.menu-content {
+    width: 100%;
+    text-align: center;
+}
+.menu-content .nav-item {
+    display: block;
+    color: white;
+    font-size: 2rem;
+    text-decoration: none;
+    margin: 15px 0;
+}
+
+
+.menu-content.active {
+    display: flex;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+}
+/* Корзина в правом углу */
+.cart-container {
+    position: relative; /* Для корректного позиционирования всплывающего окна */
+}
+
+.cart-icon {
+    margin-right: 10px;
+    font-size: 1.5rem;
+    color: #000;
+    text-decoration: none;
+}
+
+.cart-icon:hover {
+    color: #ff6600;
+}
+
+.cart-dropdown {
+    position: fixed;
+    bottom: 60px; /* выше нижней навигации */
+    left: 0;
+    width: 100%;
+    max-height: 70vh;
+    background-color: #fff;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    z-index: 1001;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.cart-dropdown.active {
+    display: flex;
+}
+
+
+.cart-dropdown h3 {
+    margin-top: 0;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.65em;
+}
+
+.cart-dropdown button {
+    background-color: #9C9C9C;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 5px 5px 0 0;
+}
+
+/* Стили для кнопок + и - в корзине */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.cart-item .item-info {
+    flex-grow: 1;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.cart-item .cart-buttons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100px;
+}
+
+.cart-item .quantity {
+    padding: 0 5px;
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Стилизация скроллбара */
+#cartItems {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#cartItems::-webkit-scrollbar {
+    width: 4px;
+}
+
+#cartItems::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#cartItems::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 2px;
+}
+
+#cartItems::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Медиа-запросы для мобильных устройств */
+@media (max-width: 768px) {
+    .cart-dropdown {
+        width: 300px;
+        max-height: 80vh;
+    }
+    
+    #cartItems {
+        max-height: 300px;
+    }
+}
+
+/* Стиль кнопок "+" и "-" */
+.quantity-control {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    color: #333;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+/* Стиль отображения количества товара */
+.quantity-display {
+    font-size: 16px;
+    margin: 0 10px;
+    display: inline-block;
+    color: #333;
+}
+
+/* Стили для выпадающего окна */
+.cabinet-dropdown {
+    position: fixed; /* Позиция относительно родителя */
+    top: 100%; /* Находится под кнопкой */
+    left: 0; /* Прижать к левой стороне */
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 15px;
+    max-width: calc(100vw - 20px); /* Чтобы вмещался по ширине экрана */
+    max-height: calc(100vh - 20px); /* Чтобы вмещался по высоте экрана */
+    overflow-y: auto; /* Скролл для содержимого, если его слишком много */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border-radius: 8px;
+}
+
+.cabinet-dropdown h2 {
+    padding: 8px; /* Отступы внутри заголовка */
+}
+
+.cabinet-dropdown span {
+    margin-left: auto; /* Сдвиг крестика вправо */
+}
+
+.cabinet-dropdown h2, .cabinet-dropdown h3, .cabinet-dropdown p {
+    margin: 0 0 10px;
+}
+
+.cabinet-dropdown button {
+    background-color: #8D917A;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#cartModal h3, #cartModal button {
+    margin-bottom: 10px;
+}
+.menu-header {
+    text-align: center;
+}
+.menu-header .subtitle {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 20%;
+}
+.menu-headeer .subtitlee {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 90px;
+    margin: 0px 15px;
+}
+#menu p {
+    text-align: center;
+    padding-top: 10px;
+    line-height: 1.4;
+    margin: 0px 20px;
+}
+
+h2, p {
+    margin-top: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+}
+
+select, textarea {
+     width: 100%;
+    min-height: 50px;
+    max-height: 300px;
+    resize: none;
+    overflow-y: hidden;
+    transition: height 0.2s ease-in-out;
+}
+textarea:focus, textarea:not(:placeholder-shown) {
+    height: auto;
+}
+buttoon {
+    margin-top: 15px;
+    padding: 10px;
+    border: none;
+    background: #28a745;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+#reviews {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.review {
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #28a745;
+}
+
+@media (max-width: 1024px) {
+    .navbar.active {
+        justify-content: space-evenly; /* Равномерное распределение элементов */
+    }
+}
+@media (max-width: 768px){
+
+      .navbar.active {
+        justify-content: space-evenly; /* Равномерное распределение элементов */
+    }
+ }
+
+@media (max-width: 768px) {
+    .accordion {
+        padding: 0 15px;
+    }
+    
+    .accordion-button {
+        padding: 12px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .accordion {
+        padding: 0 10px;
+    }
+    
+    .accordion-button {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+}
+
+#reviewForm {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+.main-content {
+    flex: 1 0 auto;
+    padding-top: 80px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.no-reviews, .error-message {
+    text-align: center;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.no-reviews {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+.error-message {
+    background-color: #fff3f3;
+    color: #dc3545;
+}
+
+#reviewContainer {
+    margin-top: 20px;
+    margin-bottom: 100px;
+}
+
+.review {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
