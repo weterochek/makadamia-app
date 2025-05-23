@@ -11,12 +11,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-<header>
-        <nav>
-            <div class="navbar-center">
-                <a href="index.html"><img src="images/logo.png" alt="Logo" class="navbar-logo"></a>
-            </div>
-        </nav>
 <div class="main-content">
     <div class="account-container">
         <h2>Личный кабинет</h2>
@@ -50,6 +44,7 @@
         </div>
     </div>
 </footer>
+<script src="script.js"></script>
 <nav class="bottom-nav">
   <a href="index.html" class="nav-item">
     <img id="homeIcon" src="images/free-icon-home-1946488.png" alt="Главная" />
@@ -73,14 +68,14 @@
     <span>Кабинет</span>
   </a>
 
-  <div id="cartDropdown" class="cart-dropdown">
-    <h3>Ваша Корзина</h3>
-    <div id="cartItems"></div>
-    <p id="totalAmount"></p>
-    <button onclick="goToCheckoutPage()">К Оформлению заказа</button>
-    <button id="clear-cart" class="clear-cart">Очистить корзину</button>
-  </div>
 </nav>
-<script src="script.js"></script>
+
+<div id="cartDropdown" class="cart-dropdown">
+  <h3>Ваша Корзина</h3>
+  <div id="cartItems"></div>
+  <p id="totalAmount"></p>
+  <button onclick="goToCheckoutPage()">К Оформлению заказа</button>
+  <button id="clear-cart" class="clear-cart">Очистить корзину</button>
+</div>
 </body>
 </html>
