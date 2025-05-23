@@ -131,7 +131,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-
+function loadCartFromLocalStorage() {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+        cart = JSON.parse(storedCart);
+    } else {
+        cart = {};
+    }
+    updateCartDisplay();
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
     console.log("🔄 Дополнительная проверка токена после загрузки DOM...");
