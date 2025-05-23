@@ -19,7 +19,7 @@ const Review = require('./models/Review');
 
 // Настройка CORS
 const allowedOrigins = [
-  'https://makadamia-app.onrender.com'
+  'https://makadamia-app.onrender.com',
   'http://localhost:3000' // Для локальной разработки
 ];
 
@@ -28,7 +28,7 @@ console.log("Отправка запроса на /refresh");
 const corsOptions = {
     origin: (origin, callback) => {
         const allowedOrigins = [
-            "https://makadamia-app.onrender.com"
+            "https://makadamia-app.onrender.com",
             "http://localhost:3000"
         ];
         if (!origin || allowedOrigins.includes(origin)) {
