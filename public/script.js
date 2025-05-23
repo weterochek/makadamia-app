@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function loadProductMap() {
     try {
-        const response = await fetch('https://mobile-site.onrender.com/api/products');
+        const response = await fetch('https://makadamia-app.onrender.com/api/products');
         const products = await response.json();
         products.forEach(product => {
             productMap[product._id] = { name: product.name, price: product.price };
@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        fetch("https://mobile-site.onrender.com/account", {
+        fetch("https://makadamia-app.onrender.com/account", {
             method: "GET",
             credentials: "include", // ✅ Передаем cookies
             headers: {
@@ -459,7 +459,7 @@ async function handleCheckoutFormSubmit(event) {
     console.log("📡 Отправка данных заказа:", orderData);
 
     try {
-        const response = await fetch("https://mobile-site.onrender.com/api/order", {
+        const response = await fetch("https://makadamia-app.onrender.com/api/order", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -725,7 +725,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    fetch(`https://mobile-site.onrender.com/api/user-orders`, { 
+    fetch(`https://makadamia-app.onrender.com/api/user-orders`, { 
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`
@@ -931,7 +931,7 @@ async function refreshAccessToken() {
     console.log("🔄 Запрос на обновление access-токена...");
 
     try {
-        const response = await fetch("https://mobile-site.onrender.com/refresh", {
+        const response = await fetch("https://makadamia-app.onrender.com/refresh", {
             method: "POST",
             credentials: "include"
         });
@@ -1030,7 +1030,7 @@ function editField(field) {
         input.disabled = false;
         input.focus();
     } else {
-        fetch("https://mobile-site.onrender.com/account", {
+        fetch("https://makadamia-app.onrender.com/account", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -1055,7 +1055,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    fetch("https://mobile-site.onrender.com/account", {
+    fetch("https://makadamia-app.onrender.com/account", {
         method: "GET", // ✅ Добавляем явное указание метода
         headers: { 
             "Authorization": `Bearer ${token}` // ✅ Передаем токен
@@ -1080,7 +1080,7 @@ async function updateAccountField(data) {
     const token = localStorage.getItem("accessToken");
 
     try {
-        const response = await fetch("https://mobile-site.onrender.com/account", {
+        const response = await fetch("https://makadamia-app.onrender.com/account", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -1153,7 +1153,7 @@ async function logout() {
     console.log("🚪 Выход из аккаунта...");
 
     try {
-        await fetch("https://mobile-site.onrender.com/logout", {
+        await fetch("https://makadamia-app.onrender.com/logout", {
             method: "POST",
             credentials: "include" // Передаем cookies
         });
@@ -1230,7 +1230,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    fetch("https://mobile-site.onrender.com/account", {
+    fetch("https://makadamia-app.onrender.com/account", {
         method: "GET",
         credentials: "include", // ✅ Добавляем передачу cookies
         headers: {
@@ -1260,7 +1260,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function updateAccount(newUsername, newPassword) {
   const token = localStorage.getItem("accessToken");
 
-  const response = await fetch("https://mobile-site.onrender.com/account", {
+  const response = await fetch("https://makadamia-app.onrender.com/account", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -1304,7 +1304,7 @@ async function loadOrders() {
     }
 
     try {
-        const response = await fetch("https://mobile-site.onrender.com/orders", {
+        const response = await fetch("https://makadamia-app.onrender.com/orders", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -1393,7 +1393,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadReviews() {
     try {
         console.log('Начинаем загрузку отзывов...');
-        const response = await fetch('https://mobile-site.onrender.com/api/reviews');
+        const response = await fetch('https://makadamia-app.onrender.com/api/reviews');
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
