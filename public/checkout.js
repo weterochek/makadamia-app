@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const response = await fetch("https://mobile-site.onrender.com/account", {
+            const response = await fetch("https://makadamia-app.onrender.com/account", {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (refreshResult) {
                     // Если обновление успешно, повторяем запрос с новым токеном
                     const newToken = getToken();
-                    const newResponse = await fetch("https://mobile-site.onrender.com/account", {
+                    const newResponse = await fetch("https://makadamia-app.onrender.com/account", {
                         method: "GET",
                         credentials: "include",
                         headers: {
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Функция для обновления токена
     async function refreshToken() {
         try {
-            const response = await fetch("https://mobile-site.onrender.com/refresh", {
+            const response = await fetch("https://makadamia-app.onrender.com/refresh", {
                 method: "POST",
                 credentials: "include"
             });
@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }))
                 };
 
-                const response = await fetch("https://mobile-site.onrender.com/api/order", {
+                const response = await fetch("https://makadamia-app.onrender.com/api/order", {
                     method: "POST",
                     headers: {
                         "Authorization": `Bearer ${token}`,
