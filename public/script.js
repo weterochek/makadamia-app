@@ -1166,19 +1166,27 @@ function checkAuthStatus() {
 
         authButton.style.display = "none";
 
-        // ✅ Вместо inline-block используем полноценные flex-стили
+        // Показываем "Кабинет" в правильном flex-формате
         cabinetButton.style.display = "flex";
         cabinetButton.style.flexDirection = "column";
         cabinetButton.style.alignItems = "center";
         cabinetButton.style.justifyContent = "center";
-        cabinetButton.style.minWidth = "60px";
         cabinetButton.style.flex = "1 1 0";
         cabinetButton.style.gap = "4px";
+        cabinetButton.style.width = "auto";
     } else {
         console.log("⚠️ Пользователь не авторизован");
 
-        authButton.style.display = "inline-block";
         cabinetButton.style.display = "none";
+
+        // Показываем "Вход" в том же стиле
+        authButton.style.display = "flex";
+        authButton.style.flexDirection = "column";
+        authButton.style.alignItems = "center";
+        authButton.style.justifyContent = "center";
+        authButton.style.flex = "1 1 0";
+        authButton.style.gap = "4px";
+        authButton.style.width = "auto";
 
         sessionStorage.removeItem("authChecked");
     }
