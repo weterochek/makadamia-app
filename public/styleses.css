@@ -173,9 +173,13 @@ textarea:focus {
   align-items: center;
   text-decoration: none;
   color: #222;
-  font-size: 14px; /* Больше текст */
+  font-size: 14px;
+  flex: 1 1 0;       /* добавлено */
+  gap: 4px;          /* для согласованности */
 }
-
+#cabinetButton {
+  display: none;
+}
 .bottom-nav .nav-item img {
   width: 28px;  /* Больше иконки */
   height: 28px;
