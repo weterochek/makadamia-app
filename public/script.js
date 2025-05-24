@@ -1151,7 +1151,7 @@ document.getElementById('saveCity').addEventListener('click', async () => {
 });
 // Проверка состояния авторизации
 function checkAuthStatus() {
-    const token = localStorage.getItem("accessToken"); // Должно быть accessToken
+    const token = localStorage.getItem("accessToken");
     const username = localStorage.getItem("username");
     const authButton = document.getElementById("authButton");
     const cabinetButton = document.getElementById("cabinetButton");
@@ -1161,14 +1161,25 @@ function checkAuthStatus() {
         return;
     }
 
-    if (token && username && !isTokenExpired(token)) { 
+    if (token && username && !isTokenExpired(token)) {
         console.log("✅ Пользователь авторизован");
+
         authButton.style.display = "none";
-        cabinetButton.style.display = "inline-block";
+
+        // ✅ Вместо inline-block используем полноценные flex-стили
+        cabinetButton.style.display = "flex";
+        cabinetButton.style.flexDirection = "column";
+        cabinetButton.style.alignItems = "center";
+        cabinetButton.style.justifyContent = "center";
+        cabinetButton.style.minWidth = "60px";
+        cabinetButton.style.flex = "1 1 0";
+        cabinetButton.style.gap = "4px";
     } else {
         console.log("⚠️ Пользователь не авторизован");
+
         authButton.style.display = "inline-block";
         cabinetButton.style.display = "none";
+
         sessionStorage.removeItem("authChecked");
     }
 }
