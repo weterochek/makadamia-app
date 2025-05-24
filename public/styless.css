@@ -81,18 +81,15 @@ hr {
 }
 
 .bottom-nav .nav-item {
+  flex: 1 1 0;
+  min-width: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-decoration: none;
-  color: #222;
-  font-size: 14px;
-  flex: 1 1 0;       /* добавлено */
-  gap: 4px;          /* для согласованности */
+  justify-content: center;
+  gap: 4px;
 }
-#cabinetButton {
-  display: none;
-}
+
 .bottom-nav .nav-item img {
   width: 28px;  /* Больше иконки */
   height: 28px;
@@ -103,6 +100,7 @@ hr {
   font-size: 13px;
   line-height: 1.2;
 }
+
 .bottom-nav .nav-item img.active-icon {
   transform: scale(1.25);
   transition: transform 0.2s ease;
