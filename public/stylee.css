@@ -146,10 +146,6 @@ header nav {
   transform: scale(1.25);
   transition: transform 0.2s ease;
 }
-#authButton,
-#cabinetButton {
-  display: none; /* Оба скрыты по умолчанию */
-}
 #cabinetButton {
   display: none;
 }
