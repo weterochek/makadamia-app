@@ -149,9 +149,10 @@ header nav {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 60px;
-  flex: 1 1 0;
+  flex: 1 1 0;         /* равное распределение ширины */
   gap: 4px;
+  width: auto !important;   /* убираем принудительную ширину */
+  max-width: 100%;          /* ограничение */
 }
 /* Стили для меню */
 .menu-header {
