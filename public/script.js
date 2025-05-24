@@ -156,7 +156,14 @@ function loadCartFromLocalStorage() {
     }
     updateCartDisplay();
 }
+const path = window.location.pathname;
 
+if (path.includes("index.html") || path === "/" || path.includes("national cuisine")) {
+  const homeIcon = document.getElementById("homeIcon");
+  if (homeIcon) {
+    homeIcon.classList.add("active-icon");
+  }
+}
 document.addEventListener("DOMContentLoaded", async () => {
     console.log("🔄 Дополнительная проверка токена после загрузки DOM...");
 
