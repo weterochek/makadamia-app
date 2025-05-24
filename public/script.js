@@ -61,7 +61,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+window.addEventListener("load", () => {
+  const path = window.location.pathname;
 
+  // Очистка старых активных иконок
+  document.querySelectorAll(".bottom-nav .nav-item img").forEach(img => {
+    img.classList.remove("active-icon");
+  });
+
+  // Назначаем active-icon в зависимости от URL
+  if (path.includes("index.html")) {
+    document.getElementById("homeIcon")?.classList.add("active-icon");
+  } else if (path.includes("Review.html")) {
+    document.getElementById("reviewsIcon")?.classList.add("active-icon");
+  } else if (path.includes("account.html")) {
+    document.getElementById("cabinetIcon")?.classList.add("active-icon");
+  }
+});
 document.addEventListener("DOMContentLoaded", () => {
   highlightActiveIcon(); // ← вызываем при полной загрузке DOM
 
