@@ -127,7 +127,9 @@ header nav {
   align-items: center;
   text-decoration: none;
   color: #222;
-  font-size: 14px; /* Больше текст */
+  font-size: 14px;
+  flex: 1 1 0;       /* добавлено */
+  gap: 4px;          /* для согласованности */
 }
 
 .bottom-nav .nav-item img {
@@ -149,14 +151,7 @@ header nav {
   display: none; /* Оба скрыты по умолчанию */
 }
 #cabinetButton {
-  display: flex !important;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1 1 0;         /* равное распределение ширины */
-  gap: 4px;
-  width: auto !important;   /* убираем принудительную ширину */
-  max-width: 100%;          /* ограничение */
+  display: none;
 }
 /* Стили для меню */
 .menu-header {
