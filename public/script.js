@@ -1206,6 +1206,7 @@ async function logout() {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("userId");
         localStorage.removeItem("username");
+        localStorage.removeItem("userData"); // ✅ ДОБАВЬ ЭТУ СТРОКУ
 
         console.log("✅ Выход выполнен успешно!");
     } catch (error) {
@@ -1214,6 +1215,7 @@ async function logout() {
         window.location.href = "/index.html";
     }
 }
+
 
 
 
