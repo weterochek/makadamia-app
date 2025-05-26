@@ -1200,10 +1200,9 @@ async function logout() {
     try {
         await fetch("https://makadamia-app.onrender.com/logout", {
             method: "POST",
-            credentials: "include" // Передаем cookies
+            credentials: "include"
         });
 
-        // Очищаем локальное хранилище
         localStorage.removeItem("accessToken");
         localStorage.removeItem("userId");
         localStorage.removeItem("username");
@@ -1212,7 +1211,6 @@ async function logout() {
     } catch (error) {
         console.error("❌ Ошибка при выходе:", error);
     } finally {
-        // Перенаправляем пользователя на страницу входа
         window.location.href = "/index.html";
     }
 }
@@ -1226,13 +1224,6 @@ function handleAuthClick() {
     } else {
         window.location.href = 'login.html';
     }
-}
-function logout() {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("username");
-  sessionStorage.clear();
-  console.log("🚪 Выход выполнен. Перенаправление на главную страницу.");
-  window.location.href = "index.html";
 }
 
 // Переход на страницу личного кабинета
