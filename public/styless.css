@@ -65,6 +65,72 @@ hr {
     border: none;
     border-top: 1px solid #ddd;
 }
+/* 💼 Личный кабинет — стили */
+.account-container {
+  max-width: 400px;
+  margin: 80px auto 30px;
+  padding: 25px;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.account-container h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.account-container p {
+  font-size: 16px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.account-container label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.account-container input[type="text"] {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  min-width: 150px;
+}
+
+.account-container button {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.account-container button:hover {
+  background-color: #45a049;
+}
+
+/* Кнопка Выйти */
+.account-container p:last-child button {
+  background-color: #e53935;
+}
+
+.account-container p:last-child button:hover {
+  background-color: #d32f2f;
+}
+
 .bottom-nav {
   position: fixed;
   bottom: 0;
