@@ -13,12 +13,7 @@ body {
     flex-direction: column;
     padding-bottom: 60px;
 }
-.rating-stars {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
+
 input[type="text"],
 textarea {
   border: 1px solid #ccc;
@@ -67,11 +62,13 @@ textarea {
 .rating-score {
   font-size: 16px;
   font-weight: bold;
+  color: black;
 }
 
 .rating-count {
   font-size: 14px;
   opacity: 0.8;
+    color: black;
 }
 
 
