@@ -154,7 +154,7 @@ app.get('/orders', async (req, res) => {
 });
 app.post("/api/order", authMiddleware, async (req, res) => {
     try {
-        const { items, address, additionalInfo, createdAt } = req.body;
+        const { items, address, additionalInfo, createdAt, phone } = req.body;
 
         if (!items || items.length === 0) {
             return res.status(400).json({ message: "Корзина не может быть пустой" });
@@ -164,6 +164,7 @@ app.post("/api/order", authMiddleware, async (req, res) => {
             userId: req.user.id,
             address,
             additionalInfo,
+            phone,
             items,
             createdAt,
         });
