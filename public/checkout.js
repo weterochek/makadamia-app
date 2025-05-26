@@ -175,18 +175,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     submitButton.disabled = true;
                     submitButton.textContent = "Оформляем заказ...";
                 }
-const phone = document.getElementById("customerPhone").value.trim();
-if (!phone) {
-  alert("Пожалуйста, укажите номер телефона.");
+const phoneInput = document.getElementById("customerPhone");
+if (!phoneInput || !phoneInput.value.trim()) {
+  alert("Пожалуйста, введите номер телефона.");
   return;
 }
-                // Формируем данные заказа
+
 const orderData = {
-  name: document.getElementById("customerName").value,  // 💬 поле name есть в форме
+  name: document.getElementById("customerName").value,
   address: document.getElementById("customerAddress").value,
-  additionalInfo: document.getElementById("additionalInfo").value,
   deliveryTime: document.getElementById("deliveryTime").value,
-  phone: document.getElementById("customerPhone").value,
+  additionalInfo: document.getElementById("additionalInfo").value,
+  phone: phoneInput.value.trim(),
   totalAmount: Object.values(cart).reduce((sum, item) => sum + item.price * item.quantity, 0),
   items: Object.keys(cart).map(productId => ({
     productId: productId,
