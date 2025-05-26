@@ -43,10 +43,26 @@ textarea {
 }
 
 .review-summary {
-  font-size: 1rem;
-  color: #333;
-  display: flex;
-  gap: 10px;
+  position: relative;
+  padding-left: 50px; /* отступ для псевдоэлемента со звездой */
+}
+
+/* Заставляем каждое содержимое выводиться на отдельной строке */
+.review-summary span {
+  display: block;
+  line-height: 1.2;
+}
+
+/* Добавляем псевдоэлемент для звездочки, который будет позиционироваться слева 
+   и вертикально по центру всей review-summary */
+.review-summary::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 32px; /* можно регулировать размер по необходимости */
+  color: #FFD700;  /* золотой цвет */
 }
 input[type="text"]:focus,
 textarea:focus {
