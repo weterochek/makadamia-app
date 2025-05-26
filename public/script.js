@@ -960,8 +960,12 @@ function getTokenExp(token) {
     }
 }
 
-
 async function refreshAccessToken() {
+    if (sessionStorage.getItem("logoutFlag") === "true") {
+        console.warn("⛔ Пропускаем refresh — пользователь вышел вручную");
+        return null;
+    }
+
     console.log("🔄 Запрос на обновление access-токена...");
 
     try {
@@ -978,7 +982,7 @@ async function refreshAccessToken() {
                 console.error("⏳ Refresh-токен окончательно истек. Требуется повторный вход!");
                 logout();
             }
-            
+
             return null;
         }
 
@@ -998,8 +1002,6 @@ async function refreshAccessToken() {
         return null;
     }
 }
-
-
 
 function generateTokens(user, site) {
     const issuedAt = Math.floor(Date.now() / 1000);
@@ -1200,7 +1202,6 @@ function checkAuthStatus() {
     }
 }
 
-
 async function logout() {
     console.log("🚪 Выход из аккаунта...");
 
@@ -1210,13 +1211,11 @@ async function logout() {
             credentials: "include"
         });
 
-        // Очищаем локальные данные
         localStorage.removeItem("accessToken");
         localStorage.removeItem("userId");
         localStorage.removeItem("username");
-
-        // Флаг, чтобы checkAuthStatus не запрашивал refresh
-        sessionStorage.setItem("logoutFlag", "true");
+        localStorage.removeItem("userData"); // ← добавили
+        sessionStorage.setItem("logoutFlag", "true"); // ← добавили
 
         console.log("✅ Выход выполнен успешно!");
     } catch (error) {
@@ -1225,9 +1224,6 @@ async function logout() {
         window.location.href = "/index.html";
     }
 }
-
-
-
 
 
 function handleAuthClick() {
