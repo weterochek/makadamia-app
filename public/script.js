@@ -1161,6 +1161,13 @@ document.getElementById('saveCity').addEventListener('click', async () => {
 });
 // Проверка состояния авторизации
 function checkAuthStatus() {
+    // ⛔ Если был явный выход — не делать refresh
+    if (sessionStorage.getItem("logoutFlag") === "true") {
+        console.warn("🚫 Обнаружен logoutFlag. Пропускаем автоавторизацию.");
+        sessionStorage.removeItem("logoutFlag");
+        return;
+    }
+
     const token = localStorage.getItem("accessToken");
     const username = localStorage.getItem("username");
     const authButton = document.getElementById("authButton");
@@ -1203,10 +1210,13 @@ async function logout() {
             credentials: "include"
         });
 
+        // Очищаем локальные данные
         localStorage.removeItem("accessToken");
         localStorage.removeItem("userId");
         localStorage.removeItem("username");
-        localStorage.removeItem("userData"); // ✅ ДОБАВЬ ЭТУ СТРОКУ
+
+        // Флаг, чтобы checkAuthStatus не запрашивал refresh
+        sessionStorage.setItem("logoutFlag", "true");
 
         console.log("✅ Выход выполнен успешно!");
     } catch (error) {
@@ -1215,6 +1225,7 @@ async function logout() {
         window.location.href = "/index.html";
     }
 }
+
 
 
 
