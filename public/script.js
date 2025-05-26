@@ -1516,7 +1516,7 @@ function updateReviewSummary() {
     const avgEl = document.getElementById('averageRating');
     const countEl = document.getElementById('totalReviews');
 
-    if (avgEl) avgEl.textContent = `⭐ ${avg} / 5`;
+    if (avgEl) avgEl.textContent = ` ${avg} / 5`;
     if (countEl) countEl.textContent = `Отзывы: ${total}`;
 }
 
