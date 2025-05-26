@@ -89,7 +89,15 @@ hr {
   justify-content: center;
   gap: 4px;
 }
-
+.nav-item-visible {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  flex: 1 1 0;
+  gap: 4px;
+}
 .bottom-nav .nav-item img {
   width: 28px;  /* Больше иконки */
   height: 28px;
