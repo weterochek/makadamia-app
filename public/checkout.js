@@ -182,13 +182,16 @@ if (!phone) {
 }
                 // Формируем данные заказа
 const orderData = {
+  name: document.getElementById("customerName").value,  // 💬 поле name есть в форме
   address: document.getElementById("customerAddress").value,
   additionalInfo: document.getElementById("additionalInfo").value,
   deliveryTime: document.getElementById("deliveryTime").value,
   phone: document.getElementById("customerPhone").value,
+  totalAmount: Object.values(cart).reduce((sum, item) => sum + item.price * item.quantity, 0),
   items: Object.keys(cart).map(productId => ({
     productId: productId,
-    quantity: cart[productId].quantity
+    quantity: cart[productId].quantity,
+    price: cart[productId].price
   }))
 };
 
