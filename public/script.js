@@ -1491,7 +1491,14 @@ async function loadReviews() {
         // Обновляем пагинацию и отображаем первую страницу
         updatePagination();
         displayReviews(1); // Явно передаем номер страницы
-        
+        updateReviewSummary();
+        const starsFilter = document.getElementById("filterStars");
+const dateFilter = document.getElementById("filterDate");
+
+if (starsFilter && dateFilter) {
+    starsFilter.addEventListener("change", applyFilters);
+    dateFilter.addEventListener("change", applyFilters);
+}
     } catch (error) {
         console.error('Ошибка при загрузке отзывов:', error);
         const reviewContainer = document.getElementById('reviewContainer');
@@ -1499,6 +1506,68 @@ async function loadReviews() {
             reviewContainer.innerHTML = '<div class="error-message">Произошла ошибка при загрузке отзывов. Пожалуйста, попробуйте позже.</div>';
         }
     }
+}
+function updateReviewSummary() {
+    const total = allReviews.length;
+    const avg = total > 0 
+        ? (allReviews.reduce((sum, r) => sum + parseInt(r.rating || 0), 0) / total).toFixed(1)
+        : 0;
+
+    const avgEl = document.getElementById('averageRating');
+    const countEl = document.getElementById('totalReviews');
+
+    if (avgEl) avgEl.textContent = `⭐ ${avg} / 5`;
+    if (countEl) countEl.textContent = `Отзывы: ${total}`;
+}
+
+function applyFilters() {
+    const starValue = document.getElementById("filterStars").value;
+    const dateValue = document.getElementById("filterDate").value;
+    
+    let filtered = [...allReviews];
+
+    if (starValue !== "all") {
+        filtered = filtered.filter(r => parseInt(r.rating) === parseInt(starValue));
+    }
+
+    filtered.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateValue === "newest" ? dateB - dateA : dateA - dateB;
+    });
+
+    displayFilteredReviews(filtered);
+}
+
+function displayFilteredReviews(reviews) {
+    const container = document.getElementById("reviewContainer");
+    container.innerHTML = '';
+
+    if (reviews.length === 0) {
+        container.innerHTML = "<p class='no-reviews'>Нет отзывов по выбранным фильтрам</p>";
+        return;
+    }
+
+    reviews.forEach(review => {
+        const el = document.createElement('div');
+        el.className = 'review';
+
+        const rating = parseInt(review.rating) || 0;
+        const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+        const date = new Date(review.date).toLocaleDateString('ru-RU');
+
+        const name = review.displayName || review.username || 'Анонимный пользователь';
+
+        el.innerHTML = `
+          <div class="review-header">
+            <span class="review-author">${name}</span>
+            <span class="review-date">${date}</span>
+          </div>
+          <div class="review-rating">${stars}</div>
+          <div class="review-text">${review.comment}</div>
+        `;
+        container.appendChild(el);
+    });
 }
 
 // Функция обновления пагинации
