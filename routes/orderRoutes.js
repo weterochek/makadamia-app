@@ -32,6 +32,7 @@ router.post("/order", authMiddleware, async (req, res) => {
             userId: req.user.id,
             name: req.user.username,
             address,
+            phone: req.body.phone, 
             deliveryTime: req.body.deliveryTime, // Добавляем время доставки
             additionalInfo,
             items: populatedItems,
