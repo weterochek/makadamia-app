@@ -62,6 +62,7 @@ function displayOrders(orders) {
                 <p>Адрес: ${order.address}</p>
                 <p>Дата оформления: ${new Date(order.createdAt).toLocaleDateString()} ${new Date(order.createdAt).toLocaleTimeString()}</p>
                 <p>Время доставки: ${order.deliveryTime || 'Не указано'}</p>
+                <p><strong>Телефон:</strong> ${order.phone || 'не указан'}</p>
                 <p>Общая сумма: ${order.totalAmount} ₽</p>
         `;
 
