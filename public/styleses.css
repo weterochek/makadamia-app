@@ -47,7 +47,7 @@ textarea {
 
 .star-icon {
   font-size: 32px;
-  color: #FFD700;
+  color: #9c9c9c;
   flex-shrink: 0;
   line-height: 1;
 }
@@ -274,9 +274,9 @@ textarea:focus {
 }
 
 .page-btn.active {
-    background-color: #28a745;
+    background-color: #9c9c9c;
     color: white;
-    border-color: #28a745;
+    border-color: #9c9c9c;
 }
 
 .page-btn:hover:not(:disabled) {
@@ -968,7 +968,7 @@ buttoon {
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-left: 5px solid #28a745;
+    border-left: 5px solid #9c9c9c;
 }
 
 @media (max-width: 1024px) {
