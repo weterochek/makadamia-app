@@ -177,15 +177,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 // Формируем данные заказа
-                const orderData = {
-                    address: document.getElementById("customerAddress").value,
-                    additionalInfo: document.getElementById("additionalInfo").value,
-                    deliveryTime: document.getElementById("deliveryTime").value,
-                    items: Object.keys(cart).map(productId => ({
-                        productId: productId,
-                        quantity: cart[productId].quantity
-                    }))
-                };
+const orderData = {
+  address: document.getElementById("customerAddress").value,
+  additionalInfo: document.getElementById("additionalInfo").value,
+  deliveryTime: document.getElementById("deliveryTime").value,
+  phone: document.getElementById("customerPhone").value,
+  items: Object.keys(cart).map(productId => ({
+    productId: productId,
+    quantity: cart[productId].quantity
+  }))
+};
 
                 const response = await fetch("https://makadamia-app.onrender.com/api/order", {
                     method: "POST",
