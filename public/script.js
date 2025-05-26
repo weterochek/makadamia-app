@@ -1553,7 +1553,7 @@ function displayFilteredReviews(reviews) {
         el.className = 'review';
 
         const rating = parseInt(review.rating) || 0;
-        const stars = ''.repeat(rating) + '☆'.repeat(5 - rating);
+        const stars =  repeat(rating) + repeat(5 - rating);
         const date = new Date(review.date).toLocaleDateString('ru-RU');
 
         const name = review.displayName || review.username || 'Анонимный пользователь';
