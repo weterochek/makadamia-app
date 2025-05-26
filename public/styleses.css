@@ -41,29 +41,40 @@ textarea {
 .review-header-flex h2 {
   margin: 0;
 }
-
-.review-summary {
-  position: relative;
-  padding-left: 50px; /* отступ для псевдоэлемента со звездой */
+.rating-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: #fff; /* Или #000 под светлую тему */
+  font-family: Arial, sans-serif;
 }
 
-/* Заставляем каждое содержимое выводиться на отдельной строке */
-.review-summary span {
-  display: block;
+.star-icon {
+  font-size: 32px;
+  color: #FFD700;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.rating-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   line-height: 1.2;
 }
 
-/* Добавляем псевдоэлемент для звездочки, который будет позиционироваться слева 
-   и вертикально по центру всей review-summary */
-.review-summary::before {
-  content: '★';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 32px; /* можно регулировать размер по необходимости */
-  color: #FFD700;  /* золотой цвет */
+.rating-score {
+  font-size: 16px;
+  font-weight: bold;
 }
+
+.rating-count {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+
 input[type="text"]:focus,
 textarea:focus {
   border-color: #999;
