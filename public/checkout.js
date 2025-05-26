@@ -175,7 +175,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     submitButton.disabled = true;
                     submitButton.textContent = "Оформляем заказ...";
                 }
-
+const phone = document.getElementById("customerPhone").value.trim();
+if (!phone) {
+  alert("Пожалуйста, укажите номер телефона.");
+  return;
+}
                 // Формируем данные заказа
 const orderData = {
   address: document.getElementById("customerAddress").value,
