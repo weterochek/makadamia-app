@@ -1227,6 +1227,13 @@ function handleAuthClick() {
         window.location.href = 'login.html';
     }
 }
+function logout() {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("username");
+  sessionStorage.clear();
+  console.log("🚪 Выход выполнен. Перенаправление на главную страницу.");
+  window.location.href = "index.html";
+}
 
 // Переход на страницу личного кабинета
 function openCabinet() {
