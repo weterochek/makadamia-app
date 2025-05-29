@@ -1183,43 +1183,61 @@ document.getElementById('saveCity').addEventListener('click', async () => {
 });
 // Проверка состояния авторизации
 function checkAuthStatus() {
-    // ⛔ Если был явный выход — не делать refresh
-if (localStorage.getItem("logoutFlag") === "true") {
-    console.warn("🚫 Обнаружен logoutFlag. Пропускаем автоавторизацию.");
-    return;
-}
+    // 🛑 1. Пропустить авторизацию, если пользователь явно вышел
+    if (localStorage.getItem("logoutFlag") === "true") {
+        console.warn("🚫 Обнаружен logoutFlag. Пропускаем автоавторизацию.");
+        return;
+    }
 
+    // 📦 2. Получаем данные из хранилища
     const token = localStorage.getItem("accessToken");
     const username = localStorage.getItem("username");
+
+    // 🧩 3. Ищем кнопки в DOM
     const authButton = document.getElementById("authButton");
     const cabinetButton = document.getElementById("cabinetButton");
 
+    // ✅ Проверка, есть ли кнопки на странице
     if (!authButton || !cabinetButton) {
         console.warn("❌ Не найдены кнопки 'Вход' или 'Личный кабинет'!");
         return;
     }
 
+    // 🧠 4. Проверяем токен и имя пользователя
     if (token && username && !isTokenExpired(token)) {
         console.log("✅ Пользователь авторизован");
 
+        // Скрываем кнопку "Вход"
         authButton.style.display = "none";
         authButton.classList.remove("nav-item-visible");
 
-        cabinetButton.style.display = "flex"; // можно оставить или убрать, если по умолчанию скрыт
+        // Показываем кнопку "Кабинет"
+        cabinetButton.style.display = "flex";
         cabinetButton.classList.add("nav-item-visible");
 
+        // 💡 Привязываем действия на кнопки (если нужно)
+        cabinetButton.onclick = () => {
+            window.location.href = "/account.html";
+        };
     } else {
         console.log("⚠️ Пользователь не авторизован");
 
+        // Скрываем кнопку "Кабинет"
         cabinetButton.style.display = "none";
         cabinetButton.classList.remove("nav-item-visible");
 
+        // Показываем кнопку "Вход"
         authButton.style.display = "flex";
         authButton.classList.add("nav-item-visible");
 
+        // 💡 Назначаем обработчик входа (если не через <a>)
+        authButton.onclick = () => {
+            window.location.href = "/login.html";
+        };
+
+        // 🧹 Очистка состояния
         sessionStorage.removeItem("authChecked");
     }
-}
 
 async function logout() {
     console.log("🚪 Выход из аккаунта...");
