@@ -961,19 +961,20 @@ function getTokenExp(token) {
 }
 
 async function refreshAccessToken() {
-if (sessionStorage.getItem("logoutFlag") === "true") {
-    console.warn("⛔ Пропускаем refresh — пользователь вышел вручную");
+    if (localStorage.getItem("logoutFlag") === "true") {
+        console.warn("⛔ Пропускаем refresh — пользователь вышел вручную");
 
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("username");
-    localStorage.removeItem("userData");
+        // Чистим всё при ручном выходе
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("username");
+        localStorage.removeItem("userData");
 
-    // ✅ Удаляем флаг из sessionStorage, как и должны
-    sessionStorage.removeItem("logoutFlag");
+        // 💡 флаг можно удалить, если не нужен на следующей загрузке
+        localStorage.removeItem("logoutFlag");
 
-    return null;
-}
+        return null;
+    }
 
     console.log("🔄 Запрос на обновление access-токена...");
 
@@ -1011,6 +1012,7 @@ if (sessionStorage.getItem("logoutFlag") === "true") {
         return null;
     }
 }
+
 
 
 function generateTokens(user, site) {
@@ -1228,7 +1230,7 @@ async function logout() {
         localStorage.removeItem("userId");
         localStorage.removeItem("username");
         localStorage.removeItem("userData"); // ← добавили
-        sessionStorage.setItem("logoutFlag", "true"); // ← добавили
+        localStorage.setItem("logoutFlag", "true"); // ← добавили
 
         console.log("✅ Выход выполнен успешно!");
     } catch (error) {
