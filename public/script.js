@@ -961,7 +961,7 @@ function getTokenExp(token) {
 }
 
 async function refreshAccessToken() {
-    if (localStorage.getItem("logoutFlag") === "true") {
+    if (sessionStorage.getItem("logoutFlag") === "true") {
         console.warn("⛔ Пропускаем refresh — пользователь вышел вручную");
 
         // Удаляем всё
@@ -1180,11 +1180,11 @@ document.getElementById('saveCity').addEventListener('click', async () => {
 // Проверка состояния авторизации
 function checkAuthStatus() {
     // ⛔ Если был явный выход — не делать refresh
-    if (sessionStorage.getItem("logoutFlag") === "true") {
-        console.warn("🚫 Обнаружен logoutFlag. Пропускаем автоавторизацию.");
-        sessionStorage.removeItem("logoutFlag");
-        return;
-    }
+if (sessionStorage.getItem("logoutFlag") === "true") {
+    console.warn("🚫 Обнаружен logoutFlag. Пропускаем автоавторизацию.");
+    sessionStorage.removeItem("logoutFlag");
+    return;
+}
 
     const token = localStorage.getItem("accessToken");
     const username = localStorage.getItem("username");
