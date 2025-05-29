@@ -9,15 +9,15 @@ let isSubmitting = false;
 
 
 (async () => {
-    console.log("🔄 Мгновенная проверка и обновление токена...");
+    if (sessionStorage.getItem("logoutFlag") === "true") {
+        console.warn("⛔ Refresh отменён: пользователь вышел вручную");
+        return;
+    }
 
     const token = localStorage.getItem("accessToken");
 
-    if (!token) {
-        console.log("⏳ Access-токен отсутствует, обновляем немедленно...");
-        await refreshAccessToken();
-    } else if (isTokenExpired(token)) {
-        console.log("⚠️ Access-токен истёк, обновляем...");
+    if (!token || isTokenExpired(token)) {
+        console.log("🔄 Пробуем обновить токен при старте...");
         await refreshAccessToken();
     } else {
         console.log("✅ Access-токен активен, обновление не требуется.");
@@ -1053,7 +1053,7 @@ function isTokenExpired(token) {
 // Запускаем проверку токена раз в минуту
 setInterval(async () => {
   if (sessionStorage.getItem("logoutFlag") === "true") {
-    console.warn("⛔ [Interval] Обнаружен logoutFlag — пропускаем refresh");
+    console.warn("⛔ [Interval] Пользователь вышел — токен не обновляем");
     return;
   }
 
@@ -1073,7 +1073,6 @@ setInterval(async () => {
     await refreshAccessToken();
   }
 }, 30000);
-
 
 function editField(field) {
     const input = document.getElementById(field + "Input");
