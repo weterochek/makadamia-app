@@ -1228,7 +1228,7 @@ async function logout() {
         localStorage.removeItem("userId");
         localStorage.removeItem("username");
         localStorage.removeItem("userData"); // ← добавили
-        localStorage.setItem("logoutFlag", "true"); // ← добавили
+        sessionStorage.setItem("logoutFlag", "true"); // ← добавили
 
         console.log("✅ Выход выполнен успешно!");
     } catch (error) {
