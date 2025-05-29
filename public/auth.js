@@ -63,7 +63,6 @@ loginForm.addEventListener("submit", async (e) => {
 
         const data = await response.json();
         if (response.ok) {
-    sessionStorage.removeItem("logoutFlag"); // 👈 добавляем сюда
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("userId", data.userId);
     localStorage.setItem("username", username);
