@@ -961,22 +961,19 @@ function getTokenExp(token) {
 }
 
 async function refreshAccessToken() {
-    if (sessionStorage.getItem("logoutFlag") === "true") {
-        console.warn("⛔ Пропускаем refresh — пользователь вышел вручную");
+if (sessionStorage.getItem("logoutFlag") === "true") {
+    console.warn("⛔ Пропускаем refresh — пользователь вышел вручную");
 
-        // Удаляем всё
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("userId");
-        localStorage.removeItem("username");
-        localStorage.removeItem("userData");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("username");
+    localStorage.removeItem("userData");
 
-        // ✅ Удаляем флаг (теперь правильно)
-        localStorage.removeItem("logoutFlag");
+    // ✅ Удаляем флаг из sessionStorage, как и должны
+    sessionStorage.removeItem("logoutFlag");
 
-        // Перенаправляем на главную
-        window.location.href = "/index.html";
-        return null;
-    }
+    return null;
+}
 
     console.log("🔄 Запрос на обновление access-токена...");
 
