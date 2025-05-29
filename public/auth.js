@@ -66,6 +66,7 @@ loginForm.addEventListener("submit", async (e) => {
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("userId", data.userId);
     localStorage.setItem("username", username);
+    localStorage.removeItem("logoutFlag");
     window.location.href = "/index.html";
         } else {
             alert(data.message || "Ошибка входа.");
