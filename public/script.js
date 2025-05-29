@@ -168,6 +168,11 @@ if (path.includes("index.html") || path === "/" || path.includes("national cuisi
 document.addEventListener("DOMContentLoaded", async () => {
     console.log("🔄 Дополнительная проверка токена после загрузки DOM...");
 
+    if (localStorage.getItem("logoutFlag") === "true") {
+        console.warn("⛔ DOMContentLoaded: пользователь вышел — токен не обновляем");
+        return;
+    }
+
     const token = localStorage.getItem("accessToken");
     if (!token || isTokenExpired(token)) {
         console.log("⏳ Повторная попытка обновления токена...");
@@ -1051,7 +1056,7 @@ function isTokenExpired(token) {
 
 // Запускаем проверку токена раз в минуту
 setInterval(async () => {
-  if (sessionStorage.getItem("logoutFlag") === "true") {
+  if (localStorage.getItem("logoutFlag") === "true") {
     console.warn("⛔ [Interval] Пользователь вышел — токен не обновляем");
     return;
   }
@@ -1179,9 +1184,8 @@ document.getElementById('saveCity').addEventListener('click', async () => {
 // Проверка состояния авторизации
 function checkAuthStatus() {
     // ⛔ Если был явный выход — не делать refresh
-if (sessionStorage.getItem("logoutFlag") === "true") {
+if (localStorage.getItem("logoutFlag") === "true") {
     console.warn("🚫 Обнаружен logoutFlag. Пропускаем автоавторизацию.");
-    sessionStorage.removeItem("logoutFlag");
     return;
 }
 
