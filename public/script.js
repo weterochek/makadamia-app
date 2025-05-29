@@ -970,8 +970,8 @@ async function refreshAccessToken() {
         localStorage.removeItem("username");
         localStorage.removeItem("userData");
 
-        // Удаляем флаг (чтобы не мешал при новом входе)
-        sessionStorage.removeItem("logoutFlag");
+        // ✅ Удаляем флаг (теперь правильно)
+        localStorage.removeItem("logoutFlag");
 
         // Перенаправляем на главную
         window.location.href = "/index.html";
