@@ -961,7 +961,7 @@ function getTokenExp(token) {
 }
 
 async function refreshAccessToken() {
-    if (sessionStorage.getItem("logoutFlag") === "true") {
+    if (localStorage.getItem("logoutFlag") === "true") {
         console.warn("⛔ Пропускаем refresh — пользователь вышел вручную");
 
         // Удаляем всё
@@ -1231,7 +1231,7 @@ async function logout() {
         localStorage.removeItem("userId");
         localStorage.removeItem("username");
         localStorage.removeItem("userData"); // ← добавили
-        sessionStorage.setItem("logoutFlag", "true"); // ← добавили
+        localStorage.setItem("logoutFlag", "true"); // ← добавили
 
         console.log("✅ Выход выполнен успешно!");
     } catch (error) {
