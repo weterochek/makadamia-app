@@ -964,12 +964,17 @@ async function refreshAccessToken() {
     if (sessionStorage.getItem("logoutFlag") === "true") {
         console.warn("⛔ Пропускаем refresh — пользователь вышел вручную");
 
-        // Удаляем возможные токены
+        // Удаляем всё
         localStorage.removeItem("accessToken");
         localStorage.removeItem("userId");
         localStorage.removeItem("username");
         localStorage.removeItem("userData");
 
+        // Удаляем флаг (чтобы не мешал при новом входе)
+        sessionStorage.removeItem("logoutFlag");
+
+        // Перенаправляем на главную
+        window.location.href = "/index.html";
         return null;
     }
 
