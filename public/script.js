@@ -1052,23 +1052,27 @@ function isTokenExpired(token) {
 
 // Запускаем проверку токена раз в минуту
 setInterval(async () => {
-    const token = localStorage.getItem("accessToken");
+  if (sessionStorage.getItem("logoutFlag") === "true") {
+    console.warn("⛔ [Interval] Обнаружен logoutFlag — пропускаем refresh");
+    return;
+  }
 
-    if (!token) {
-        console.warn("⚠️ Нет accessToken, пробуем обновить...");
-        await refreshAccessToken();
-        return;
-    }
+  const token = localStorage.getItem("accessToken");
 
-    const exp = getTokenExp(token);
-    const now = Math.floor(Date.now() / 1000);
+  if (!token) {
+    console.warn("⚠️ Нет accessToken, пробуем обновить...");
+    await refreshAccessToken();
+    return;
+  }
 
-    if (!exp || (exp - now) < 300) { // Если токен просрочен или скоро истечёт
-        console.log("⏳ Access-токен истекает, обновляем...");
-        await refreshAccessToken();
-    }
-}, 30000); // Проверяем каждые 30 секунд
+  const exp = getTokenExp(token);
+  const now = Math.floor(Date.now() / 1000);
 
+  if (!exp || (exp - now) < 300) {
+    console.log("⏳ Access-токен истекает, обновляем...");
+    await refreshAccessToken();
+  }
+}, 30000);
 
 
 function editField(field) {
