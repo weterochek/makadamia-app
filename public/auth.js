@@ -105,7 +105,6 @@ async function refreshAccessToken() {
 function logout() {
     fetch("https://makadamia-app.onrender.com/logout", { method: "POST", credentials: "include" })
         .then(() => {
-            sessionStorage.setItem("logoutFlag", "true");
             localStorage.removeItem("accessToken");
             localStorage.removeItem("username");
             localStorage.removeItem("userId");
