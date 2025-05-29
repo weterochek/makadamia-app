@@ -963,6 +963,13 @@ function getTokenExp(token) {
 async function refreshAccessToken() {
     if (sessionStorage.getItem("logoutFlag") === "true") {
         console.warn("⛔ Пропускаем refresh — пользователь вышел вручную");
+
+        // Удаляем возможные токены
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("username");
+        localStorage.removeItem("userData");
+
         return null;
     }
 
@@ -1002,6 +1009,7 @@ async function refreshAccessToken() {
         return null;
     }
 }
+
 
 function generateTokens(user, site) {
     const issuedAt = Math.floor(Date.now() / 1000);
