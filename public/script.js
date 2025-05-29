@@ -9,7 +9,7 @@ let isSubmitting = false;
 
 
 (async () => {
-    if (sessionStorage.getItem("logoutFlag") === "true") {
+    if (localStorage.getItem("logoutFlag") === "true") {
         console.warn("⛔ Refresh отменён: пользователь вышел вручную");
         return;
     }
