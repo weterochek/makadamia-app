@@ -63,10 +63,11 @@ loginForm.addEventListener("submit", async (e) => {
 
         const data = await response.json();
         if (response.ok) {
-            localStorage.setItem("accessToken", data.accessToken);
-            localStorage.setItem("userId", data.userId);
-            localStorage.setItem("username", username);
-            window.location.href = "/index.html";
+    sessionStorage.removeItem("logoutFlag"); // 👈 добавляем сюда
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("userId", data.userId);
+    localStorage.setItem("username", username);
+    window.location.href = "/index.html";
         } else {
             alert(data.message || "Ошибка входа.");
         }
