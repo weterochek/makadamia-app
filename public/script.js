@@ -1238,7 +1238,7 @@ function checkAuthStatus() {
         // 🧹 Очистка состояния
         sessionStorage.removeItem("authChecked");
     }
-
+}
 async function logout() {
     console.log("🚪 Выход из аккаунта...");
 
