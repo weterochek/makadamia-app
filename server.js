@@ -19,7 +19,7 @@ const Review = require('./models/Review');
 
 // Настройка CORS
 const allowedOrigins = [
-  'https://makadamia-app.onrender.com',
+  'https://makadamia-app-etvs.onrender.com',
   'http://localhost:3000' // Для локальной разработки
 ];
 
@@ -28,7 +28,7 @@ console.log("Отправка запроса на /refresh");
 const corsOptions = {
     origin: (origin, callback) => {
         const allowedOrigins = [
-            "https://makadamia-app.onrender.com",
+            "https://makadamia-app-etvs.onrender.com",
             "http://localhost:3000"
         ];
         if (!origin || allowedOrigins.includes(origin)) {
@@ -195,13 +195,13 @@ function generateTokens(user, site) {
     const issuedAt = Math.floor(Date.now() / 1000);
     
     const accessToken = jwt.sign(
-        { id: user._id, username: user.username, site: "https://makadamia-app.onrender.com", iat: issuedAt },
+        { id: user._id, username: user.username, site: "https://makadamia-app-etvs.onrender.com", iat: issuedAt },
         JWT_SECRET,
         { expiresIn: "30m" }  // ⏳ Access-токен на 30 минут
     );
 
     const refreshToken = jwt.sign(
-        { id: user._id, username: user.username, site: "https://makadamia-app.onrender.com", iat: issuedAt },
+        { id: user._id, username: user.username, site: "https://makadamia-app-etvs.onrender.com", iat: issuedAt },
         REFRESH_SECRET,
         { expiresIn: "7d" }  // 🔄 Refresh-токен на 7 дней
     );
@@ -341,7 +341,7 @@ app.post('/logout', (req, res) => {
         secure: true,
         sameSite: 'None',
         path: "/",
-        domain: "makadamia-app.onrender.com"
+        domain: "makadamia-app-etvs.onrender.com"
     });
 
     res.json({ message: 'Вы вышли из системы' });
