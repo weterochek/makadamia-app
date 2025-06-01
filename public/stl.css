@@ -550,7 +550,7 @@ form button:hover {
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: #4CAF50;
+    border-color: #9c9c9c;
     outline: none;
 }
 
