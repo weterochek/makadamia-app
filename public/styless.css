@@ -27,7 +27,13 @@ body {
   cursor: pointer;
   font-size: 16px;
 }
-
+.account-container input[type="email"] {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    min-width: 150px;
+}
 
 #toggleHistoryBtn:hover {
   background-color: #9c9c9c;
