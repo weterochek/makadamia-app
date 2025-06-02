@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Восстановление пароля</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 36px;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+}
+
+    .reset-container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #5a67d8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #434190;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .message {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 10px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="reset-container">
+    <h2>🔒 Восстановление пароля</h2>
+
+    <!-- Шаг 1: Ввод логина -->
+    <form id="requestForm">
+      <input type="email" id="email" placeholder="Введите вашу почту" required />
+      <button type="submit">Отправить ссылку</button>
+    </form>
+
+    <!-- Шаг 2: Ввод нового пароля -->
+    <form id="resetForm" class="hidden">
+      <div class="password-wrapper">
+  <input type="password" id="newPassword" placeholder="Новый пароль" required />
+  <span class="toggle-password" onclick="togglePassword(this, 'newPassword')">👁</span>
+      </div>
+      <input type="password" id="confirmPassword" placeholder="Повторите пароль" required />
+      <button type="submit">Сменить пароль</button>
+    </form>
+
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    const urlToken = new URLSearchParams(window.location.search).get("token");
+    const requestForm = document.getElementById("requestForm");
+    const resetForm = document.getElementById("resetForm");
+    const messageDiv = document.getElementById("message");
+
+    if (urlToken) {
+      // Скрываем форму запроса, показываем форму сброса
+      requestForm.classList.add("hidden");
+      resetForm.classList.remove("hidden");
+    }
+
+    // Шаг 1 — запрос на сброс
+   requestForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+
+  try {
+    const res = await fetch("/request-password-reset", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    messageDiv.textContent = data.message || "Что-то пошло не так";
+
+    if (res.ok && data.token) {
+      window.location.href = `/reset.html?token=${data.token}`;
+    }
+  } catch (err) {
+    messageDiv.textContent = "Ошибка соединения с сервером.";
+  }
+});
+    // Шаг 2 — смена пароля
+    resetForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const password = document.getElementById("newPassword").value;
+      const confirm = document.getElementById("confirmPassword").value;
+
+      if (password !== confirm) {
+        messageDiv.textContent = "Пароли не совпадают!";
+        return;
+      }
+
+      try {
+        const res = await fetch(`/reset-password/${urlToken}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password })
+        });
+
+        const data = await res.json();
+        messageDiv.textContent = data.message || "Что-то пошло не так";
+
+        if (res.ok) {
+          setTimeout(() => window.location.href = "/login.html", 1500);
+        }
+      } catch (err) {
+        messageDiv.textContent = "Ошибка соединения с сервером.";
+      }
+    });
+    function togglePassword(el, inputId) {
+  const input = document.getElementById(inputId);
+  const isHidden = input.type === "password";
+  input.type = isHidden ? "text" : "password";
+  el.textContent = isHidden ? "🙈" : "👁";
+}
+  </script>
+</body>
+</html>
