@@ -23,6 +23,37 @@ let isSubmitting = false;
         console.log("✅ Access-токен активен, обновление не требуется.");
     }
 })();
+async function loadProfileData() {
+  const token = localStorage.getItem("accessToken");
+  if (!token) return;
+
+  try {
+    const res = await fetch("https://makadamia-app-etvs.onrender.com/account", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) throw new Error("Ошибка HTTP: " + res.status);
+
+    const user = await res.json();
+    console.log("🔄 Данные аккаунта:", user);
+
+    const nameInput = document.getElementById("nameInput");
+    const cityInput = document.getElementById("cityInput");
+    const emailInput = document.getElementById("emailInput");
+    const usernameDisplay = document.getElementById("usernameDisplay");
+
+    if (nameInput) nameInput.value = user.name || "";
+    if (cityInput) cityInput.value = user.city || "";
+    if (emailInput) emailInput.value = user.email || "";
+    if (usernameDisplay) usernameDisplay.textContent = user.username || "—";
+
+  } catch (err) {
+    console.error("❌ Ошибка загрузки профиля:", err);
+  }
+}
 document.addEventListener("DOMContentLoaded", function () {
     console.log("JS загружен!");
 
@@ -179,37 +210,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await refreshAccessToken();
     }
 });
-async function loadProfileData() {
-  const token = localStorage.getItem("accessToken");
-  if (!token) return;
 
-  try {
-    const res = await fetch("https://makadamia-app-etvs.onrender.com/account", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    if (!res.ok) throw new Error("Ошибка HTTP: " + res.status);
-
-    const user = await res.json();
-    console.log("🔄 Данные аккаунта:", user);
-
-    const nameInput = document.getElementById("nameInput");
-    const cityInput = document.getElementById("cityInput");
-    const emailInput = document.getElementById("emailInput");
-    const usernameDisplay = document.getElementById("usernameDisplay");
-
-    if (nameInput) nameInput.value = user.name || "";
-    if (cityInput) cityInput.value = user.city || "";
-    if (emailInput) emailInput.value = user.email || "";
-    if (usernameDisplay) usernameDisplay.textContent = user.username || "—";
-
-  } catch (err) {
-    console.error("❌ Ошибка загрузки профиля:", err);
-  }
-}
 
 async function loadProductMap() {
     try {
