@@ -144,34 +144,39 @@
   }
 });
     // Шаг 2 — смена пароля
-    resetForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+   resetForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-      const password = document.getElementById("newPassword").value;
-      const confirm = document.getElementById("confirmPassword").value;
+  const password = document.getElementById("newPassword").value;
+  const confirm = document.getElementById("confirmPassword").value;
 
-      if (password !== confirm) {
-        messageDiv.textContent = "Пароли не совпадают!";
-        return;
-      }
+  if (password.length < 8) {
+    messageDiv.textContent = "Пароль должен быть не менее 8 символов.";
+    return;
+  }
 
-      try {
-        const res = await fetch(`/reset-password/${urlToken}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ password })
-        });
+  if (password !== confirm) {
+    messageDiv.textContent = "Пароли не совпадают!";
+    return;
+  }
 
-        const data = await res.json();
-        messageDiv.textContent = data.message || "Что-то пошло не так";
-
-        if (res.ok) {
-          setTimeout(() => window.location.href = "/login.html", 1500);
-        }
-      } catch (err) {
-        messageDiv.textContent = "Ошибка соединения с сервером.";
-      }
+  try {
+    const res = await fetch(`/reset-password/${urlToken}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password })
     });
+
+    const data = await res.json();
+    messageDiv.textContent = data.message || "Что-то пошло не так";
+
+    if (res.ok) {
+      setTimeout(() => window.location.href = "/login.html", 1500);
+    }
+  } catch (err) {
+    messageDiv.textContent = "Ошибка соединения с сервером.";
+  }
+});
     function togglePassword(el, inputId) {
   const input = document.getElementById(inputId);
   const isHidden = input.type === "password";
