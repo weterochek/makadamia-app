@@ -459,28 +459,24 @@ app.get('/account', protect, async (req, res) => {
     }
 });
 app.put("/account", protect, async (req, res) => {
-  const { name, city, username, password, email } = req.body;
+  const { name, city, email, username, password } = req.body;
 
   try {
     const user = await User.findById(req.user.id);
-    if (!user) {
-      return res.status(404).json({ message: 'Пользователь не найден' });
-    }
+    if (!user) return res.status(404).json({ message: "Пользователь не найден" });
 
     if (name) user.name = name;
     if (city) user.city = city;
-    if (username) user.username = username;
     if (email) user.email = email;
+    if (username) user.username = username;
     if (password) user.password = await bcrypt.hash(password, 12);
 
     await user.save();
-    res.json({ message: 'Аккаунт обновлён', user });
+    res.json({ message: "Аккаунт обновлён", user });
   } catch (error) {
-    console.error("❌ Ошибка обновления:", error);
-    res.status(500).json({ message: 'Ошибка при обновлении аккаунта', error: error.message });
+    res.status(500).json({ message: "Ошибка обновления", error: error.message });
   }
 });
-
 // Обработка корневого маршрута
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
