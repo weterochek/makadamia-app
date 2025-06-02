@@ -1019,19 +1019,19 @@ setInterval(async () => {
     await refreshAccessToken();
     return;
   }
-document.addEventListener("DOMContentLoaded", () => {
-  loadProfileData();
+
+// ✅ Объявление функции отдельно
 async function loadProfileData() {
   const token = localStorage.getItem("accessToken");
   if (!token) return;
 
   try {
-const res = await fetch("https://makadamia-app-etvs.onrender.com/account", {
-  method: "GET",
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
-});
+    const res = await fetch("https://makadamia-app-etvs.onrender.com/account", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
     if (!res.ok) throw new Error("Ошибка HTTP: " + res.status);
     const user = await res.json();
@@ -1040,11 +1040,15 @@ const res = await fetch("https://makadamia-app-etvs.onrender.com/account", {
     document.getElementById("cityInput").value = user.city || "";
     document.getElementById("emailInput").value = user.email || "";
     document.getElementById("usernameDisplay").textContent = user.username || "—";
-
   } catch (error) {
     console.error("Ошибка загрузки профиля:", error);
   }
-}})
+}
+
+// ✅ Вызов в нужном месте
+document.addEventListener("DOMContentLoaded", () => {
+  loadProfileData();
+});
 
   document.getElementById("editEmail")?.addEventListener("click", () => {
     document.getElementById("emailInput").disabled = false;
