@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
 const Product = require("../models/Products");
-const authMiddleware = require("../middleware/authMiddleware");
+const { protect } = require('../middleware/authMiddleware');
 
 // Создание заказа
-router.post("/order", authMiddleware, async (req, res) => {
+router.post("/order", protect, async (req, res) => {
     try {
         const { items, address, additionalInfo } = req.body;
         if (!items || items.length === 0) {
@@ -32,7 +32,7 @@ router.post("/order", authMiddleware, async (req, res) => {
             userId: req.user.id,
             name: req.user.username,
             address,
-            phone: req.body.phone, 
+            phone: req.body.phone,
             deliveryTime: req.body.deliveryTime, // Добавляем время доставки
             additionalInfo,
             items: populatedItems,
@@ -49,7 +49,7 @@ router.post("/order", authMiddleware, async (req, res) => {
 });
 
 // Получение всех заказов
-router.get("/orders", authMiddleware, async (req, res) => {
+router.get("/orders", protect, async (req, res) => {
     try {
         const userId = req.user.id;  // Получаем userId из токена
 
@@ -67,7 +67,7 @@ router.get("/orders", authMiddleware, async (req, res) => {
 
 
 // Получение заказов текущего пользователя
-router.get("/user-orders", authMiddleware, async (req, res) => {
+router.get("/user-orders", protect, async (req, res) => {
     try {
         const userId = req.user.id; // Получаем userId из токена (authMiddleware)
         console.log("Запрос на заказы пользователя:", userId);  // Логирование
@@ -100,7 +100,7 @@ router.get("/all-orders", async (req, res) => {
 
 
 // Обновление статуса заказа
-router.put("/order/:id", authMiddleware, async (req, res) => {
+router.put("/order/:id", protect, async (req, res) => {
     try {
         const { status } = req.body;
         await Order.findByIdAndUpdate(req.params.id, { status });
