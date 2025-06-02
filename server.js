@@ -376,13 +376,13 @@ app.post('/refresh', async (req, res) => {
 
             const { accessToken, refreshToken: newRefreshToken } = generateTokens(user);
 
-            res.cookie("refreshTokenAPP", newRefreshToken, {
-                httpOnly: true,
-                secure: true,
-                sameSite: "None",
-                path: "/",
-                maxAge: 30 * 24 * 60 * 60 * 1000  // 30 дней
-            });
+res.cookie("refreshTokenAPP", refreshToken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None", // важно для WebView
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 дней
+});
 
             console.log("✅ Refresh-токен обновлён успешно");
 
