@@ -65,6 +65,18 @@
     }
   });
 </script>
+	<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.location.pathname.includes("account.html")) {
+      console.log("✅ Вызываем loadProfileData() из account.html");
+      if (typeof loadProfileData === "function") {
+        loadProfileData();
+      } else {
+        console.warn("⚠️ Функция loadProfileData не найдена");
+      }
+    }
+  });
+</script>
 <nav class="bottom-nav">
   <a href="index.html" class="nav-item">
     <img id="homeIcon" src="images/free-icon-home-1946488.png" alt="Главная" />
