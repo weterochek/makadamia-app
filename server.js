@@ -256,15 +256,10 @@ app.post('/login', async (req, res) => {
 
     const { accessToken, refreshToken } = generateTokens(user);
 
-    res.cookie("refreshTokenDesktop", refreshToken, { 
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        path: "/",
-        maxAge: 30 * 24 * 60 * 60 * 1000  // Устанавливаем refreshToken на 30 дней
-    });
-
-    res.json({ accessToken, userId: user._id });
+res.json({
+    accessToken,
+    refreshToken, // ← добавляем сюда
+    userId: user._id
 });
 
 
