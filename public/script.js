@@ -1194,6 +1194,9 @@ function checkAuthStatus() {
         cabinetButton.onclick = () => {
             window.location.href = "/account.html";
         };
+            if (typeof loadProfileData === "function") {
+        loadProfileData(); // <-- добавить сюда
+    }
     } else {
         console.log("⚠️ Пользователь не авторизован");
 
