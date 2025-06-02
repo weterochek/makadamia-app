@@ -256,12 +256,12 @@ app.post('/login', async (req, res) => {
 
     const { accessToken, refreshToken } = generateTokens(user);
 
-res.json({
-    accessToken,
-    refreshToken, // ← добавляем сюда
-    userId: user._id
+    res.json({
+        accessToken,
+        refreshToken,
+        userId: user._id
+    });
 });
-
 
 // Обработка запроса на обновление токена для ПК-версии
 app.post('/refresh', async (req, res) => {
