@@ -966,58 +966,31 @@ function getTokenExp(token) {
 }
 
 async function refreshAccessToken() {
-    if (localStorage.getItem("logoutFlag") === "true") {
-        console.warn("⛔ Пропускаем refresh — пользователь вышел вручную");
+  const refreshToken = localStorage.getItem("refreshToken");
+  if (!refreshToken) return null;
 
-        // Чистим всё при ручном выходе
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("userId");
-        localStorage.removeItem("username");
-        localStorage.removeItem("userData");
+  try {
+    const response = await fetch("https://makadamia-app-etvs.onrender.com/-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: refreshToken })
+    });
 
-        // 💡 флаг можно удалить, если не нужен на следующей загрузке
-        localStorage.removeItem("logoutFlag");
+    const data = await response.json();
 
-        return null;
+    if (data.token) {
+      localStorage.setItem("accessToken", data.token);
+      return data.token;
+    } else {
+      console.warn("❌ Не удалось обновить accessToken");
+      logout(); // если есть такая функция
+      return null;
     }
-
-    console.log("🔄 Запрос на обновление access-токена...");
-
-    try {
-        const response = await fetch("https://makadamia-app-etvs.onrender.com/refresh", {
-            method: "POST",
-            credentials: "include"
-        });
-
-        if (!response.ok) {
-            const data = await response.json();
-            console.warn("❌ Ошибка обновления токена:", data.message);
-
-            if (data.message.includes("Refresh-токен истек") || data.message.includes("Недействителен")) {
-                console.error("⏳ Refresh-токен окончательно истек. Требуется повторный вход!");
-                logout();
-            }
-
-            return null;
-        }
-
-        const data = await response.json();
-        console.log("✅ Новый accessToken:", data.accessToken);
-
-        if (data.accessToken) {
-            localStorage.setItem("accessToken", data.accessToken);
-        } else {
-            console.error("❌ Сервер не отправил новый accessToken!");
-            return null;
-        }
-
-        return data.accessToken;
-    } catch (error) {
-        console.error("❌ Ошибка при обновлении токена:", error);
-        return null;
-    }
+  } catch (error) {
+    console.error("Ошибка при обновлении токена:", error);
+    return null;
+  }
 }
-
 
 
 function generateTokens(user, site) {
@@ -1253,6 +1226,8 @@ async function logout() {
         localStorage.removeItem("username");
         localStorage.removeItem("userData"); // ← добавили
         localStorage.setItem("logoutFlag", "true"); // ← добавили
+        localStorage.removeItem("refreshToken");
+
 
         console.log("✅ Выход выполнен успешно!");
     } catch (error) {
