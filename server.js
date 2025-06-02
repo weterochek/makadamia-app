@@ -4,12 +4,14 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const path = require("path");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const Joi = require("joi");
 const app = express();
 const orderRoutes = require("./routes/orderRoutes");
-const authMiddleware = require('./middleware/authMiddleware');
+const { protect } = require('./middleware/authMiddleware');
 const Order = require('./models/Order');
 const User = require('./models/User');
 const Product = require("./models/Products");  
@@ -40,8 +42,6 @@ const corsOptions = {
     credentials: true, // Обязательно для передачи s!
 };
 app.use(express.json());
-app.use(cors(corsOptions));
-// Используем CORS с настройками
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use('/api', orderRoutes);
@@ -84,7 +84,7 @@ app.use((req, res, next) => {
 
 const Cart = require("./models/Cart"); // Подключаем модель
 
-app.post('/cart/add', authMiddleware, async (req, res) => {
+app.post('/cart/add', protect, async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: 'Авторизуйтесь, чтобы добавить товар в корзину' });
@@ -152,7 +152,7 @@ app.get('/orders', async (req, res) => {
         res.status(500).json({ message: "Ошибка получения заказов" });
     }
 });
-app.post("/api/order", authMiddleware, async (req, res) => {
+app.post("/api/order", protect, async (req, res) => {
     try {
         const { items, address, additionalInfo, createdAt, phone } = req.body;
 
@@ -177,10 +177,83 @@ app.post("/api/order", authMiddleware, async (req, res) => {
         res.status(500).json({ message: "Ошибка при создании заказа", error: error.message });
     }
 });
+//почта
+app.post("/update-email", protect, async (req, res) => {
+  const userId = req.user.id;
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json({ message: "Email обязателен" });
+
+  try {
+    const user = await User.findById(userId);
+    user.email = email;
+    await user.save();
+    res.status(200).json({ message: "Email обновлён" });
+  } catch (err) {
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+const transporter = nodemailer.createTransport({
+  service: "gmail", // или 'yandex', 'mail.ru', 'smtp.yourhost.com'
+  auth: {
+    user: "seryojabaulin25@gmail.com",     // ← ТВОЙ EMAIL
+    pass: "exwtwuflxjzonrpa"         // ← Пароль или App Password
+  }
+});
+app.post('/request-password-reset', async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(404).json({ message: "Пользователь с этой почтой не найден" });
+  }
+
+  const token = crypto.randomBytes(32).toString('hex');
+  user.resetToken = token;
+  user.resetTokenExpiration = Date.now() + 15 * 60 * 1000;
+  await user.save();
+
+  const resetLink = `https://mobile-site.onrender.com/reset.html?token=${token}`;
+
+await transporter.sendMail({
+  from: '"Makadamia Support" <your_email@gmail.com>', // от кого
+  to: user.email, // кому
+  subject: "Восстановление пароля",
+  html: `
+    <h3>Здравствуйте, ${user.username}!</h3>
+    <p>Вы запросили восстановление пароля на сайте Makadamia.</p>
+    <p>Перейдите по ссылке ниже, чтобы задать новый пароль:</p>
+    <a href="${resetLink}">${resetLink}</a>
+    <p><small>Ссылка активна в течение 15 минут.</small></p>
+  `
+});
+
+res.json({ message: "Письмо с ссылкой отправлено на почту" });
+});
+app.post('/reset-password/:token', async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  const user = await User.findOne({
+    resetToken: token,
+    resetTokenExpiration: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    return res.status(400).json({ message: "Ссылка устарела или недействительна" });
+  }
+
+  user.password = await bcrypt.hash(password, 12);
+  user.resetToken = undefined;
+  user.resetTokenExpiration = undefined;
+  await user.save();
+
+  res.json({ message: "Пароль успешно обновлён" });
+});
 
 
 // Получение заказов пользователя
-app.get('/user-orders/:userId', authMiddleware, async (req, res) => {
+app.get('/user-orders/:userId', protect, async (req, res) => {
     try {
         const orders = await Order.find({ userId: req.params.userId }).populate("items.productId", "name price");
         res.json(orders);
@@ -361,10 +434,10 @@ app.post('/-token', (req, res) => {
 });
 
 // Приватный маршрут
-app.get('/private-route', authMiddleware, (req, res) => {
+app.get('/private-route', protect, (req, res) => {
   res.json({ message: `Добро пожаловать, пользователь ${req.user.id}` });
 });
-app.get('/account', authMiddleware, async (req, res) => {
+app.get('/account', protect, async (req, res) => {
     try {
         if (!req.user || !req.user.id) {
             return res.status(401).json({ message: "Не авторизован" });
@@ -385,7 +458,7 @@ app.get('/account', authMiddleware, async (req, res) => {
         res.status(500).json({ message: "Ошибка сервера", error: error.message });
     }
 });
-app.put('/account', authMiddleware, async (req, res) => {
+app.put('/account', protect, async (req, res) => {
     const { name, city, username, password } = req.body; // Получаем данные из запроса
 
     try {
@@ -396,6 +469,7 @@ app.put('/account', authMiddleware, async (req, res) => {
 
         if (name) user.name = name;  // Обновляем имя
         if (city) user.city = city;  // Обновляем город
+        if (email) user.email = email;
         if (username) user.username = username;  // Обновляем username
         if (password) user.password = await bcrypt.hash(password, 12);  // Обновляем пароль
 
@@ -437,7 +511,7 @@ app.get('/api/reviews', async (req, res) => {
 });
 
 // Маршрут для создания отзыва
-app.post('/api/reviews', authMiddleware, async (req, res) => {
+app.post('/api/reviews', protect, async (req, res) => {
     try {
         const { rating, comment, displayName } = req.body;
         
