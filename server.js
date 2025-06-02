@@ -338,7 +338,7 @@ app.post('/login', async (req, res) => {
 
 // Обработка запроса на обновление токена для ПК-версии
 app.post('/refresh', async (req, res) => {
-    const refreshToken = req.cookies.refreshTokenDesktop;
+    const refreshToken = req.cookies.refreshTokenAPP;
 
     if (!refreshToken) {
         console.error("❌ Refresh-токен отсутствует в cookies");
@@ -351,7 +351,7 @@ app.post('/refresh', async (req, res) => {
         if (err) {
             console.error("❌ Ошибка проверки refresh-токена:", err.message);
             
-            res.clearCookie("refreshTokenDesktop", {
+            res.clearCookie("refreshTokenAPP", {
                 httpOnly: true,
                 secure: true,
                 sameSite: "None",
@@ -363,7 +363,7 @@ app.post('/refresh', async (req, res) => {
 
         if (!decoded.exp || (decoded.exp * 1000 < Date.now())) {
             console.error("❌ Refresh-токен окончательно истёк!");
-            res.clearCookie("refreshTokenDesktop", { path: "/" });
+            res.clearCookie("refreshTokenAPP", { path: "/" });
             return res.status(403).json({ message: "Refresh-токен истёк" });
         }
 
@@ -376,7 +376,7 @@ app.post('/refresh', async (req, res) => {
 
             const { accessToken, refreshToken: newRefreshToken } = generateTokens(user);
 
-            res.cookie("refreshTokenDesktop", newRefreshToken, {
+            res.cookie("refreshTokenAPP", newRefreshToken, {
                 httpOnly: true,
                 secure: true,
                 sameSite: "None",
@@ -404,7 +404,7 @@ app.post('/refresh', async (req, res) => {
 app.post('/logout', (req, res) => {
     console.log("🔄 Выход из аккаунта...");
     
-    res.clearCookie("refreshTokenDesktop", {
+    res.clearCookie("refreshTokenAPP", {
         httpOnly: true,
         secure: true,
         sameSite: 'None',
