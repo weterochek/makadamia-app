@@ -1634,7 +1634,11 @@ function updatePagination() {
     
     console.log('Пагинация обновлена');
 }
-
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.includes("account.html")) {
+    loadProfileData(); // 🟢 ВАЖНО: загружаем данные профиля
+  }
+});
 // Функция отображения отзывов для текущей страницы
 function displayReviews(page) {
     console.log('Отображение отзывов для страницы:', page);
