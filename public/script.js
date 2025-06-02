@@ -1021,6 +1021,7 @@ setInterval(async () => {
   }
 
 // ✅ Объявление функции отдельно
+// 1. СНАЧАЛА объявляем функцию
 async function loadProfileData() {
   const token = localStorage.getItem("accessToken");
   if (!token) return;
@@ -1034,22 +1035,31 @@ async function loadProfileData() {
     });
 
     if (!res.ok) throw new Error("Ошибка HTTP: " + res.status);
-    const user = await res.json();
 
-    document.getElementById("nameInput").value = user.name || "";
-    document.getElementById("cityInput").value = user.city || "";
-    document.getElementById("emailInput").value = user.email || "";
-    document.getElementById("usernameDisplay").textContent = user.username || "—";
-  } catch (error) {
-    console.error("Ошибка загрузки профиля:", error);
+    const user = await res.json();
+    console.log("🔄 Данные аккаунта:", user);
+
+    const nameInput = document.getElementById("nameInput");
+    const cityInput = document.getElementById("cityInput");
+    const emailInput = document.getElementById("emailInput");
+    const usernameDisplay = document.getElementById("usernameDisplay");
+
+    if (nameInput) nameInput.value = user.name || "";
+    if (cityInput) cityInput.value = user.city || "";
+    if (emailInput) emailInput.value = user.email || "";
+    if (usernameDisplay) usernameDisplay.textContent = user.username || "—";
+
+  } catch (err) {
+    console.error("❌ Ошибка загрузки профиля:", err);
   }
 }
 
-// ✅ Вызов в нужном месте
+// 2. ПОТОМ используем в DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
-  loadProfileData();
+  if (window.location.pathname.includes("account.html")) {
+    loadProfileData();
+  }
 });
-
   document.getElementById("editEmail")?.addEventListener("click", () => {
     document.getElementById("emailInput").disabled = false;
     document.getElementById("saveEmail").style.display = "inline-block";
@@ -1634,11 +1644,7 @@ function updatePagination() {
     
     console.log('Пагинация обновлена');
 }
-document.addEventListener("DOMContentLoaded", () => {
-  if (window.location.pathname.includes("account.html")) {
-    loadProfileData(); // 🟢 ВАЖНО: загружаем данные профиля
-  }
-});
+
 // Функция отображения отзывов для текущей страницы
 function displayReviews(page) {
     console.log('Отображение отзывов для страницы:', page);
