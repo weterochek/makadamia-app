@@ -47,6 +47,7 @@ registerForm.addEventListener("submit", async (e) => {
 
 // === Вход ===
 const loginForm = document.querySelector("#loginForm form");
+
 loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -57,17 +58,20 @@ loginForm.addEventListener("submit", async (e) => {
         const response = await fetch("/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
-            credentials: "include"
+            body: JSON.stringify({ username, password })
+            // ❌ credentials: "include" не нужен, мы не используем cookies
         });
 
         const data = await response.json();
+
         if (response.ok) {
-    localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("userId", data.userId);
-    localStorage.setItem("username", username);
-    localStorage.removeItem("logoutFlag");
-    window.location.href = "/index.html";
+            localStorage.setItem("accessToken", data.accessToken);
+            localStorage.setItem("refreshToken", data.refreshToken); // ✅ сохраняем refreshToken
+            localStorage.setItem("userId", data.userId);
+            localStorage.setItem("username", username);
+            localStorage.removeItem("logoutFlag");
+
+            window.location.href = "/index.html"; // или куда тебе нужно
         } else {
             alert(data.message || "Ошибка входа.");
         }
@@ -76,7 +80,6 @@ loginForm.addEventListener("submit", async (e) => {
         alert("Произошла ошибка. Попробуйте снова.");
     }
 });
-
 
 // === Функция обновления accessToken ===
 async function refreshAccessToken() {
