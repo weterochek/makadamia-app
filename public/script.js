@@ -1026,12 +1026,12 @@ async function loadProfileData() {
   if (!token) return;
 
   try {
-    const res = await fetch("/account", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+const res = await fetch("https://makadamia-app-etvs.onrender.com/account", {
+  method: "GET",
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+});
 
     if (!res.ok) throw new Error("Ошибка HTTP: " + res.status);
     const user = await res.json();
