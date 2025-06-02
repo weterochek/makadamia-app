@@ -45,14 +45,14 @@
 
 <script src="auth.js"></script>
     <script>
-function togglePassword(inputId, button) {
+function togglePassword(inputId, icon) {
   const input = document.getElementById(inputId);
   if (input.type === "password") {
     input.type = "text";
-    button.textContent = "🙈";
+    icon.textContent = "🙈";
   } else {
     input.type = "password";
-    button.textContent = "👁";
+    icon.textContent = "👁";
   }
 }
 </script>
