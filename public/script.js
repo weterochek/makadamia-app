@@ -939,28 +939,33 @@ function getTokenExp(token) {
 }
 
 async function refreshAccessToken() {
-  const refreshToken = localStorage.getItem("refreshToken");
-  if (!refreshToken) return null;
+  console.log("🔄 Попытка обновить accessToken через refreshTokenAPP");
 
   try {
-    const response = await fetch("https://makadamia-app-etvs.onrender.com/-token", {
+    const response = await fetch("https://makadamia-app-etvs.onrender.com/refresh", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: refreshToken })
+      credentials: "include"
     });
 
     const data = await response.json();
 
-    if (data.token) {
-      localStorage.setItem("accessToken", data.token);
-      return data.token;
+    if (response.ok && data.accessToken) {
+      localStorage.setItem("accessToken", data.accessToken);
+      console.log("✅ Новый accessToken получен:", data.accessToken);
+
+      // Если есть checkAuthStatus — вызываем для обновления интерфейса
+      if (typeof checkAuthStatus === "function") {
+        checkAuthStatus();
+      }
+
+      return data.accessToken;
     } else {
-      console.warn("❌ Не удалось обновить accessToken");
-      logout(); // если есть такая функция
+      console.warn("❌ Не удалось обновить токен:", data.message || response.status);
+      logout?.(); // если у тебя реализована функция logout
       return null;
     }
-  } catch (error) {
-    console.error("Ошибка при обновлении токена:", error);
+  } catch (err) {
+    console.error("❌ Ошибка при запросе токена:", err);
     return null;
   }
 }
