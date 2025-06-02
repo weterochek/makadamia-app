@@ -23,37 +23,7 @@ let isSubmitting = false;
         console.log("✅ Access-токен активен, обновление не требуется.");
     }
 })();
-async function loadProfileData() {
-  const token = localStorage.getItem("accessToken");
-  if (!token) return;
 
-  try {
-    const res = await fetch("https://makadamia-app-etvs.onrender.com/account", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    if (!res.ok) throw new Error("Ошибка HTTP: " + res.status);
-
-    const user = await res.json();
-    console.log("🔄 Данные аккаунта:", user);
-
-    const nameInput = document.getElementById("nameInput");
-    const cityInput = document.getElementById("cityInput");
-    const emailInput = document.getElementById("emailInput");
-    const usernameDisplay = document.getElementById("usernameDisplay");
-
-    if (nameInput) nameInput.value = user.name || "";
-    if (cityInput) cityInput.value = user.city || "";
-    if (emailInput) emailInput.value = user.email || "";
-    if (usernameDisplay) usernameDisplay.textContent = user.username || "—";
-
-  } catch (err) {
-    console.error("❌ Ошибка загрузки профиля:", err);
-  }
-}
 document.addEventListener("DOMContentLoaded", function () {
     console.log("JS загружен!");
 
@@ -1132,7 +1102,6 @@ async function updateAccountField(data) {
     }
 }
 
-
 document.getElementById('editName').addEventListener('click', () => {
     document.getElementById('nameInput').disabled = false;
     document.getElementById('saveName').style.display = 'inline-block';
@@ -1297,12 +1266,49 @@ function goToCheckoutPage() {
     window.location.href = "checkout.html";
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  loadProfileData();
+async function loadProfileData() {
+  const token = localStorage.getItem("accessToken");
+  if (!token) return;
 
+  try {
+    const res = await fetch("/account", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) throw new Error("Ошибка HTTP: " + res.status);
+    const user = await res.json();
+
+    document.getElementById("nameInput").value = user.name || "";
+    document.getElementById("cityInput").value = user.city || "";
+    document.getElementById("emailInput").value = user.email || "";
+    document.getElementById("usernameDisplay").textContent = user.username || "—";
+
+  } catch (error) {
+    console.error("Ошибка загрузки профиля:", error);
+  }
+}})
+
+  document.getElementById("editEmail")?.addEventListener("click", () => {
+    document.getElementById("emailInput").disabled = false;
+    document.getElementById("saveEmail").style.display = "inline-block";
+  });
+
+  document.getElementById("saveEmail")?.addEventListener("click", async () => {
+    const email = document.getElementById("emailInput").value;
+    await updateAccountField({ email });
+    document.getElementById("emailInput").disabled = true;
+    document.getElementById("saveEmail").style.display = "none";
+  });
 
 async function updateAccount(newUsername, newPassword) {
   const token = localStorage.getItem("accessToken");
 
-  const response = await fetch("https://makadamia-app-etvs.onrender.com/account", {
+  const response = await fetch("https://mobile-site.onrender.com/account", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
