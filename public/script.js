@@ -1006,6 +1006,17 @@ function isTokenExpired(token) {
 }
 
 
+// ⏳ Автообновление accessToken каждые 25 минут
+setInterval(() => {
+  fetch("/refresh", {
+    method: "POST",
+    credentials: "include"
+  }).then(res => {
+    if (!res.ok) console.warn("⚠️ Ошибка обновления токена");
+  }).catch(err => {
+    console.error("❌ Не удалось обновить токен:", err);
+  });
+}, 25 * 60 * 1000); // каждые 25 минут
 
 // Запускаем проверку токена раз в минуту
 setInterval(async () => {
