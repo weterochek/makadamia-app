@@ -330,11 +330,19 @@ app.post('/login', async (req, res) => {
 
     const { accessToken, refreshToken } = generateTokens(user);
 
-    res.json({
-        accessToken,
-        refreshToken,
-        userId: user._id
-    });
+// Устанавливаем refreshToken как cookie (для WebView и браузеров)
+res.cookie("refreshTokenAPP", refreshToken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None",
+  path: "/"
+});
+
+// Отправляем только accessToken и userId
+res.json({
+    accessToken,
+    userId: user._id
+});
 });
 
 // Обработка запроса на обновление токена для ПК-версии
