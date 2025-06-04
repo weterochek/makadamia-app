@@ -381,7 +381,7 @@ res.cookie("refreshTokenAPP", refreshToken, {
   secure: true,
   sameSite: "None", // важно для WebView
   path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 дней
+
 });
 
             console.log("✅ Refresh-токен обновлён успешно");
