@@ -357,7 +357,7 @@ function displayUserOrders(orders) {
                 <p>Адрес: ${order.address}</p>
                 <p>Дата оформления: ${new Date(order.createdAt).toLocaleDateString()} ${new Date(order.createdAt).toLocaleTimeString()}</p>
                 <p>Телефон: ${order.phone || 'не указан'}</p>
-                <p>Время доставки: ${formatDateTime(order.deliveryTime)}</p>`;
+                <p>Время доставки: ${formatDateTime(order.deliveryTime)}</p>
                 <p>Общая сумма: ${order.totalAmount} ₽</p>
         `;
 
@@ -551,7 +551,7 @@ function displayOrder(order, container) {
             <h3>Заказ №${order._id.slice(0, 8)}</h3>
             <p>Адрес: ${order.address}</p>
             <p>Дата оформления: ${new Date(order.createdAt).toLocaleDateString()} ${new Date(order.createdAt).toLocaleTimeString()}</p>
-            <p>Время доставки: ${formatDateTime(order.deliveryTime)}</p>`;
+            <p>Время доставки: ${formatDateTime(order.deliveryTime)}</p>
             <p>Телефон: ${order.phone || 'не указан'}</p>
             <p>Общая сумма: ${order.totalAmount} ₽</p>
     `;
