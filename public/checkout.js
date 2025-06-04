@@ -116,7 +116,18 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Ошибка загрузки данных профиля:", error);
         }
     }
+function formatDateTime(raw) {
+  const date = new Date(raw);
+  if (isNaN(date)) return raw; // если нераспознаваемая дата — вернуть как есть
 
+  return date.toLocaleString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
     // Функция для обновления токена
     async function refreshToken() {
         try {
