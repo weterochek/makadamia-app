@@ -10,6 +10,13 @@ const userSchema = new mongoose.Schema({
   city: { type: String, default: "" },
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }]  // Связь с заказами
 });
+emailVerified: {
+  type: Boolean,
+  default: false
+},
+emailVerificationToken: String,
+emailVerificationExpires: Date
+
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
