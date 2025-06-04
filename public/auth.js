@@ -27,6 +27,11 @@ registerForm.addEventListener("submit", async (e) => {
     const email = document.getElementById("registerEmail").value;
 
     try {
+        const usernameRegex = /^[a-zA-Z0-9_]+$/;
+        if (!usernameRegex.test(username)) {
+            alert("Имя пользователя может содержать только буквы, цифры и подчёркивание");
+            return;
+        }
         const response = await fetch("https://makadamia-app-etvs.onrender.com/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
