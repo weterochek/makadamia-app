@@ -184,7 +184,13 @@ if (!phoneInput || !phoneInput.value.trim()) {
 const orderData = {
   name: document.getElementById("customerName").value,
   address: document.getElementById("customerAddress").value,
-  deliveryTime: document.getElementById("deliveryTime").value,
+  deliveryTime: new Date(document.getElementById("deliveryTime").value).toLocaleString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  }),
   additionalInfo: document.getElementById("additionalInfo").value,
   phone: phoneInput.value.trim(),
   totalAmount: Object.values(cart).reduce((sum, item) => sum + item.price * item.quantity, 0),
@@ -194,7 +200,6 @@ const orderData = {
     price: cart[productId].price
   }))
 };
-
                 const response = await fetch("https://makadamia-app-etvs.onrender.com/api/order", {
                     method: "POST",
                     headers: {
