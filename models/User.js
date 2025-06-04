@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
   // 👇 Добавь это внутрь схемы
   emailVerified: { type: Boolean, default: false },
   emailVerificationToken: String,
-  emailVerificationExpires: Date
+  emailVerificationExpires: Date,
+  pendingEmail: { type: String, default: null }
 });
 
 
