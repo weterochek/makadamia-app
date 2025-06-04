@@ -384,14 +384,13 @@ app.post('/refresh', async (req, res) => {
                 return res.status(404).json({ message: "Пользователь не найден" });
             }
 
-            const { accessToken, refreshToken: newRefreshToken } = generateTokens(user);
-
+const { accessToken, refreshToken: newRefreshToken } = generateTokens(user);
 res.cookie("refreshTokenAPP", newRefreshToken, {
   httpOnly: true,
   secure: true,
   sameSite: "None",
   path: "/",
-  maxAge: 30 * 24 * 60 * 60 * 1000, // ✅ 30 дней
+  maxAge: 30 * 24 * 60 * 60 * 1000
 });
 
             console.log("✅ Refresh-токен обновлён успешно");
