@@ -1273,56 +1273,51 @@ function goToCheckoutPage() {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  async function loadProfileData() {
-    try {
-      const res = await fetch("/account", { credentials: "include" });
-      const user = await res.json();
-      document.getElementById("usernameDisplay").textContent = user.username || "";
-      document.getElementById("emailInput").value = user.email || "";
-      document.getElementById("nameInput").value = user.name || "";
-      document.getElementById("cityInput").value = user.city || "";
-    } catch (err) {
-      console.error("Ошибка загрузки профиля:", err);
-    }
-  }
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!window.location.pathname.includes("account.html")) return;
 
-  if (window.location.pathname.includes("account.html")) {
-    console.log("✅ Загружаем профиль...");
-    loadProfileData();
-  }
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) return;
 
-  // Обработка редактирования email
-  const editBtn = document.getElementById("editEmail");
-  const saveBtn = document.getElementById("saveEmail");
-  const input = document.getElementById("emailInput");
-
-  if (editBtn && saveBtn && input) {
-    editBtn.addEventListener("click", () => {
-      input.disabled = false;
-      saveBtn.style.display = "inline-block";
+  try {
+    const res = await fetch("/account", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      credentials: "include"
     });
 
-    saveBtn.addEventListener("click", async () => {
-      const email = input.value;
+    if (!res.ok) throw new Error("Ошибка загрузки профиля");
+
+    const user = await res.json();
+
+    document.getElementById("usernameDisplay").textContent = user.username || "";
+    document.getElementById("emailInput").value = user.email || "";
+    document.getElementById("nameInput").value = user.name || "";
+    document.getElementById("cityInput").value = user.city || "";
+  } catch (err) {
+    console.error("❌ Ошибка загрузки профиля:", err);
+  }
+
+  // 🎯 Email редактирование
+  const editEmail = document.getElementById("editEmail");
+  const saveEmail = document.getElementById("saveEmail");
+  const emailInput = document.getElementById("emailInput");
+
+  if (editEmail && saveEmail && emailInput) {
+    editEmail.addEventListener("click", () => {
+      emailInput.disabled = false;
+      saveEmail.style.display = "inline-block";
+    });
+
+    saveEmail.addEventListener("click", async () => {
+      const email = emailInput.value;
       await updateAccountField({ email });
-      input.disabled = true;
-      saveBtn.style.display = "none";
+      emailInput.disabled = true;
+      saveEmail.style.display = "none";
     });
   }
 });
-
-  document.getElementById("editEmail")?.addEventListener("click", () => {
-    document.getElementById("emailInput").disabled = false;
-    document.getElementById("saveEmail").style.display = "inline-block";
-  });
-
-  document.getElementById("saveEmail")?.addEventListener("click", async () => {
-    const email = document.getElementById("emailInput").value;
-    await updateAccountField({ email });
-    document.getElementById("emailInput").disabled = true;
-    document.getElementById("saveEmail").style.display = "none";
-  });
 
 async function updateAccount(newUsername, newPassword) {
   const token = localStorage.getItem("accessToken");
