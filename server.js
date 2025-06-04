@@ -290,6 +290,7 @@ app.post('/register', async (req, res) => {
   const schema = Joi.object({
     username: Joi.string().trim().min(3).max(30).required(),
     password: Joi.string().min(8).required(),
+    email: Joi.string().email().required()
   });
 
   const { error } = schema.validate(req.body);
@@ -297,7 +298,7 @@ app.post('/register', async (req, res) => {
     return res.status(400).json({ message: error.details[0].message });
   }
 
-  const { username, password } = req.body;
+  const { username, password, email } = req.body;
 
   try {
     console.log("Регистрация пользователя:", username);
@@ -307,7 +308,7 @@ app.post('/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const newUser = new User({ username, password: hashedPassword });
+    const newUser = new User({ username, password: hashedPassword, email });
 
     await newUser.save();
     console.log(`Пользователь "${username}" успешно зарегистрирован.`);
