@@ -28,6 +28,18 @@ async function loadUserOrders() {
         alert("Не удалось загрузить заказы.");
     }
 }
+function formatDateTime(raw) {
+  const date = new Date(raw);
+  if (isNaN(date)) return raw;
+
+  return date.toLocaleString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
 function displayOrders(orders) {
     const ordersContainer = document.getElementById('ordersContainer');
     const noOrdersMessage = document.getElementById('noOrdersMessage');
@@ -61,7 +73,7 @@ function displayOrders(orders) {
                 <p>Пользователь: ${order.userId?.username || 'Неизвестно'}</p>
                 <p>Адрес: ${order.address}</p>
                 <p>Дата оформления: ${new Date(order.createdAt).toLocaleDateString()} ${new Date(order.createdAt).toLocaleTimeString()}</p>
-                <p>Время доставки: ${formatDateTime(order.deliveryTime)}</p>
+                <p>Время доставки: ${order.deliveryTime ? formatDateTime(order.deliveryTime) : 'не указано'}</p>
                 <p>Телефон: ${order.phone || 'не указан'}</p>
                 <p>Общая сумма: ${order.totalAmount} ₽</p>
         `;
