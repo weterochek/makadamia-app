@@ -1302,7 +1302,7 @@ async function loadProfileData() {
     console.log("✅ Загружаем профиль...");
     loadProfileData();
   }
-});
+
   document.getElementById("editEmail")?.addEventListener("click", () => {
     document.getElementById("emailInput").disabled = false;
     document.getElementById("saveEmail").style.display = "inline-block";
