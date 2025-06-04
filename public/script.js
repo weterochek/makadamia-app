@@ -1333,6 +1333,10 @@ function loadUserData() {
     const additionalInfoInput = document.getElementById("additionalInfo");
 
     const userData = JSON.parse(localStorage.getItem("userData")) || {};
+    if (!userData.emailVerified) {
+  const warning = document.getElementById("emailWarning");
+  if (warning) warning.style.display = "block";
+}
 
     if (customerNameInput) customerNameInput.value = userData.name || "";
     if (customerAddressInput) customerAddressInput.value = userData.address || "";
