@@ -444,7 +444,7 @@ app.get('/account', protect, async (req, res) => {
             return res.status(401).json({ message: "Не авторизован" });
         }
 
-        const user = await User.findById(req.user.id).select("username name city");
+        const user = await User.findById(req.user.id).select("username name city email");
         if (!user) {
             return res.status(404).json({ message: "Пользователь не найден" });
         }
