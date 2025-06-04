@@ -41,6 +41,7 @@ registerForm.addEventListener("submit", async (e) => {
             const loginResponse = await fetch("https://makadamia-app-etvs.onrender.com/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include", // ✅ это ключевое
                 body: JSON.stringify({ username, password })
             });
 
@@ -164,6 +165,7 @@ async function fetchWithAuth(url, options = {}) {
 
     let response = await fetch(url, {
         ...options,
+        credentials: "include", // ✅ вот это добавить!
         headers: {
             ...options.headers,
             Authorization: `Bearer ${token}`,
