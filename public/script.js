@@ -1134,15 +1134,21 @@ document.getElementById('saveCity').addEventListener('click', async () => {
 });
 // Проверка состояния авторизации
 async function checkAuthStatus() {
+    const token = localStorage.getItem("accessToken");
+
+    const authButton = document.getElementById("authButton");
+    const cabinetButton = document.getElementById("cabinetButton");
+
+    if (!authButton || !cabinetButton) return;
+
     try {
         const res = await fetch("/account", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             credentials: "include"
         });
-
-        const authButton = document.getElementById("authButton");
-        const cabinetButton = document.getElementById("cabinetButton");
-
-        if (!authButton || !cabinetButton) return;
 
         if (res.ok) {
             console.log("✅ Пользователь авторизован");
@@ -1152,7 +1158,7 @@ async function checkAuthStatus() {
                 window.location.href = "/account.html";
             };
         } else {
-            throw new Error("401");
+            throw new Error("401 Unauthorized");
         }
     } catch (err) {
         console.warn("🔄 Выход из аккаунта...");
@@ -1162,17 +1168,12 @@ async function checkAuthStatus() {
         localStorage.removeItem("userData");
         localStorage.setItem("logoutFlag", "true");
 
-        const authButton = document.getElementById("authButton");
-        const cabinetButton = document.getElementById("cabinetButton");
+        authButton.style.display = "flex";
+        cabinetButton.style.display = "none";
 
-        if (authButton && cabinetButton) {
-            authButton.style.display = "flex";
-            cabinetButton.style.display = "none";
-
-            authButton.onclick = () => {
-                window.location.href = "/login.html";
-            };
-        }
+        authButton.onclick = () => {
+            window.location.href = "/login.html";
+        };
     }
 }
 window.addEventListener("load", () => {
