@@ -61,7 +61,7 @@ function displayOrders(orders) {
                 <p>Пользователь: ${order.userId?.username || 'Неизвестно'}</p>
                 <p>Адрес: ${order.address}</p>
                 <p>Дата оформления: ${new Date(order.createdAt).toLocaleDateString()} ${new Date(order.createdAt).toLocaleTimeString()}</p>
-                <p>Время доставки: ${formatDateTime(order.deliveryTime)}</p>`;
+                <p>Время доставки: ${formatDateTime(order.deliveryTime)}</p>
                 <p>Телефон: ${order.phone || 'не указан'}</p>
                 <p>Общая сумма: ${order.totalAmount} ₽</p>
         `;
