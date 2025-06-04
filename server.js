@@ -308,16 +308,65 @@ app.post('/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const newUser = new User({ username, password: hashedPassword, email });
+    const token = crypto.randomBytes(32).toString("hex");
 
-    await newUser.save();
-    console.log(`Пользователь "${username}" успешно зарегистрирован.`);
-    return res.status(201).json({ message: 'Пользователь успешно зарегистрирован' });
+const newUser = new User({
+  username,
+  password: hashedPassword,
+  email,
+  emailVerified: false,
+  emailVerificationToken: token,
+  emailVerificationExpires: Date.now() + 24 * 60 * 60 * 1000 // 24 часа
+});
+
+await newUser.save();
+
+const verifyUrl = `https://makadamia-app-etvs.onrender.com/verify-email?token=${token}&email=${email}`;
+
+await transporter.sendMail({
+  from: '"Makadamia" <seryojabaulin25@gmail.com>',
+  to: email,
+  subject: "Подтверждение почты",
+  html: `
+    <h2>Подтвердите вашу почту</h2>
+    <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить email.</p>
+    <p><small>Срок действия ссылки — 24 часа.</small></p>
+  `
+});
+
+return res.status(201).json({
+  message: 'Письмо для подтверждения отправлено на почту. Подтвердите, чтобы войти.'
+});
+
 
   } catch (err) {
     console.error("Ошибка регистрации:", err);
     return res.status(500).json({ message: 'Ошибка регистрации пользователя', error: err.message });
   }
+});
+app.get("/verify-email", async (req, res) => {
+  const { token, email } = req.query;
+
+  if (!token || !email) {
+    return res.status(400).send("Некорректный запрос.");
+  }
+
+  const user = await User.findOne({
+    email,
+    emailVerificationToken: token,
+    emailVerificationExpires: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    return res.status(400).send("Ссылка устарела или недействительна.");
+  }
+
+  user.emailVerified = true;
+  user.emailVerificationToken = undefined;
+  user.emailVerificationExpires = undefined;
+  await user.save();
+
+  return res.send("✅ Почта успешно подтверждена. Теперь вы можете войти.");
 });
 // Авторизация пользователя
 app.post('/login', async (req, res) => {
@@ -327,6 +376,9 @@ app.post('/login', async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
         return res.status(401).json({ message: 'Неверные данные' });
     }
+  if (!user.emailVerified) {
+  return res.status(403).json({ message: "Сначала подтвердите свою почту" });
+}
 
     const { accessToken, refreshToken } = generateTokens(user);
 
