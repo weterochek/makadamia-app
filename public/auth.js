@@ -80,14 +80,13 @@ loginForm.addEventListener("submit", async (e) => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password })
-            // ❌ credentials: "include" не нужен, мы не используем cookies
+             credentials: "include", // ✅ обязательно!
         });
 
         const data = await response.json();
 
         if (response.ok) {
             localStorage.setItem("accessToken", data.accessToken);
-            localStorage.setItem("refreshToken", data.refreshToken); // ✅ сохраняем refreshToken
             localStorage.setItem("userId", data.userId);
             localStorage.setItem("username", username);
             localStorage.removeItem("logoutFlag");
