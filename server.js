@@ -335,7 +335,8 @@ res.cookie("refreshTokenAPP", refreshToken, {
   httpOnly: true,
   secure: true,
   sameSite: "None",
-  path: "/"
+  path: "/",
+  maxAge: 30 * 24 * 60 * 60 * 1000 // ✅ 30 дней в миллисекундах
 });
 
 // Отправляем только accessToken и userId
@@ -388,9 +389,9 @@ app.post('/refresh', async (req, res) => {
 res.cookie("refreshTokenAPP", refreshToken, {
   httpOnly: true,
   secure: true,
-  sameSite: "None", // важно для WebView
+  sameSite: "None",
   path: "/",
-
+  maxAge: 30 * 24 * 60 * 60 * 1000 // ✅ 30 дней в миллисекундах
 });
 
             console.log("✅ Refresh-токен обновлён успешно");
