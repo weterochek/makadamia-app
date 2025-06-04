@@ -1057,12 +1057,7 @@ setInterval(async () => {
     await refreshAccessToken();
   }
 }, 30000);
-document.addEventListener("DOMContentLoaded", () => {
-  if (window.location.pathname.includes("account.html")) {
-    console.log("✅ Загружаем профиль...");
-    loadProfileData();
-  }
-});
+
 function editField(field) {
     const input = document.getElementById(field + "Input");
     console.log("Редактируем поле:", field, "Значение:", input.value);
@@ -1303,7 +1298,11 @@ async function loadProfileData() {
     console.error("Ошибка загрузки профиля:", error);
   }
 }})
-
+  if (window.location.pathname.includes("account.html")) {
+    console.log("✅ Загружаем профиль...");
+    loadProfileData();
+  }
+});
   document.getElementById("editEmail")?.addEventListener("click", () => {
     document.getElementById("emailInput").disabled = false;
     document.getElementById("saveEmail").style.display = "inline-block";
