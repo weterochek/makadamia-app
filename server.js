@@ -276,7 +276,7 @@ function generateTokens(user, site) {
     const refreshToken = jwt.sign(
         { id: user._id, username: user.username, site: "https://makadamia-app-etvs.onrender.com", iat: issuedAt },
         REFRESH_SECRET,
-        { expiresIn: "7d" }  // 🔄 Refresh-токен на 7 дней
+        { expiresIn: "30d" }  // 🔄 Refresh-токен на 7 дней
     );
 
     return { accessToken, refreshToken };
@@ -386,12 +386,12 @@ app.post('/refresh', async (req, res) => {
 
             const { accessToken, refreshToken: newRefreshToken } = generateTokens(user);
 
-res.cookie("refreshTokenAPP", refreshToken, {
+res.cookie("refreshTokenAPP", newRefreshToken, {
   httpOnly: true,
   secure: true,
   sameSite: "None",
   path: "/",
-  maxAge: 30 * 24 * 60 * 60 * 1000 // ✅ 30 дней в миллисекундах
+  maxAge: 30 * 24 * 60 * 60 * 1000, // ✅ 30 дней
 });
 
             console.log("✅ Refresh-токен обновлён успешно");
