@@ -1272,36 +1272,45 @@ function goToCheckoutPage() {
     window.location.href = "checkout.html";
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
-  loadProfileData();
-async function loadProfileData() {
-  const token = localStorage.getItem("accessToken");
-  if (!token) return;
-
-  try {
-    const res = await fetch("/account", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    if (!res.ok) throw new Error("Ошибка HTTP: " + res.status);
-    const user = await res.json();
-
-    document.getElementById("nameInput").value = user.name || "";
-    document.getElementById("cityInput").value = user.city || "";
-    document.getElementById("emailInput").value = user.email || "";
-    document.getElementById("usernameDisplay").textContent = user.username || "—";
-
-  } catch (error) {
-    console.error("Ошибка загрузки профиля:", error);
+  async function loadProfileData() {
+    try {
+      const res = await fetch("/account", { credentials: "include" });
+      const user = await res.json();
+      document.getElementById("usernameDisplay").textContent = user.username || "";
+      document.getElementById("emailInput").value = user.email || "";
+      document.getElementById("nameInput").value = user.name || "";
+      document.getElementById("cityInput").value = user.city || "";
+    } catch (err) {
+      console.error("Ошибка загрузки профиля:", err);
+    }
   }
-}})
+
   if (window.location.pathname.includes("account.html")) {
     console.log("✅ Загружаем профиль...");
     loadProfileData();
   }
+
+  // Обработка редактирования email
+  const editBtn = document.getElementById("editEmail");
+  const saveBtn = document.getElementById("saveEmail");
+  const input = document.getElementById("emailInput");
+
+  if (editBtn && saveBtn && input) {
+    editBtn.addEventListener("click", () => {
+      input.disabled = false;
+      saveBtn.style.display = "inline-block";
+    });
+
+    saveBtn.addEventListener("click", async () => {
+      const email = input.value;
+      await updateAccountField({ email });
+      input.disabled = true;
+      saveBtn.style.display = "none";
+    });
+  }
+});
 
   document.getElementById("editEmail")?.addEventListener("click", () => {
     document.getElementById("emailInput").disabled = false;
