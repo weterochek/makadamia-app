@@ -1133,66 +1133,54 @@ document.getElementById('saveCity').addEventListener('click', async () => {
     document.getElementById('saveCity').style.display = 'none';
 });
 // Проверка состояния авторизации
-function checkAuthStatus() {
-    // 🛑 1. Пропустить авторизацию, если пользователь явно вышел
-    if (localStorage.getItem("logoutFlag") === "true") {
-        console.warn("🚫 Обнаружен logoutFlag. Пропускаем автоавторизацию.");
-        return;
-    }
+async function checkAuthStatus() {
+    try {
+        const res = await fetch("/account", {
+            credentials: "include"
+        });
 
-    // 📦 2. Получаем данные из хранилища
-    const token = localStorage.getItem("accessToken");
-    const username = localStorage.getItem("username");
+        const authButton = document.getElementById("authButton");
+        const cabinetButton = document.getElementById("cabinetButton");
 
-    // 🧩 3. Ищем кнопки в DOM
-    const authButton = document.getElementById("authButton");
-    const cabinetButton = document.getElementById("cabinetButton");
+        if (!authButton || !cabinetButton) return;
 
-    // ✅ Проверка, есть ли кнопки на странице
-    if (!authButton || !cabinetButton) {
-        console.warn("❌ Не найдены кнопки 'Вход' или 'Личный кабинет'!");
-        return;
-    }
+        if (res.ok) {
+            console.log("✅ Пользователь авторизован");
+            authButton.style.display = "none";
+            cabinetButton.style.display = "flex";
+            cabinetButton.onclick = () => {
+                window.location.href = "/account.html";
+            };
+        } else {
+            throw new Error("401");
+        }
+    } catch (err) {
+        console.warn("🔄 Выход из аккаунта...");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("username");
+        localStorage.removeItem("userData");
+        localStorage.setItem("logoutFlag", "true");
 
-    // 🧠 4. Проверяем токен и имя пользователя
-    if (token && username && !isTokenExpired(token)) {
-        console.log("✅ Пользователь авторизован");
+        const authButton = document.getElementById("authButton");
+        const cabinetButton = document.getElementById("cabinetButton");
 
-        // Скрываем кнопку "Вход"
-        authButton.style.display = "none";
-        authButton.classList.remove("nav-item-visible");
+        if (authButton && cabinetButton) {
+            authButton.style.display = "flex";
+            cabinetButton.style.display = "none";
 
-        // Показываем кнопку "Кабинет"
-        cabinetButton.style.display = "flex";
-        cabinetButton.classList.add("nav-item-visible");
-
-        // 💡 Привязываем действия на кнопки (если нужно)
-        cabinetButton.onclick = () => {
-            window.location.href = "/account.html";
-        };
-            if (typeof loadProfileData === "function") {
-        loadProfileData(); // <-- добавить сюда
-    }
-    } else {
-        console.log("⚠️ Пользователь не авторизован");
-
-        // Скрываем кнопку "Кабинет"
-        cabinetButton.style.display = "none";
-        cabinetButton.classList.remove("nav-item-visible");
-
-        // Показываем кнопку "Вход"
-        authButton.style.display = "flex";
-        authButton.classList.add("nav-item-visible");
-
-        // 💡 Назначаем обработчик входа (если не через <a>)
-        authButton.onclick = () => {
-            window.location.href = "/login.html";
-        };
-
-        // 🧹 Очистка состояния
-        sessionStorage.removeItem("authChecked");
+            authButton.onclick = () => {
+                window.location.href = "/login.html";
+            };
+        }
     }
 }
+window.addEventListener("load", () => {
+  if (typeof checkAuthStatus === "function") {
+    console.log("✅ checkAuthStatus вызван через window.load");
+    checkAuthStatus();
+  }
+});
 async function logout() {
     console.log("🚪 Выход из аккаунта...");
 
