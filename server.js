@@ -148,7 +148,27 @@ app.post("/update-account", protect, async (req, res) => {
       const exists = await User.findOne({ email, _id: { $ne: user._id } });
       if (exists) return res.status(400).json({ message: "Этот email уже используется" });
 
-      user.pendingEmail = email;
+if (email && email !== user.email) {
+  // проверка уникальности
+  const exists = await User.findOne({ email });
+  if (exists) {
+    return res.status(400).json({ message: "Этот email уже используется" });
+  }
+
+  user.pendingEmail = email;
+
+  const token = crypto.randomBytes(32).toString("hex");
+  user.emailVerificationToken = token;
+  user.emailVerificationExpires = Date.now() + 3600000;
+
+  const verifyLink = `${user.site || "https://makadamia-e0hb.onrender.com"}/verify-email?token=${token}&email=${email}`;
+
+  await transporter.sendMail({
+    to: email,
+    subject: "Подтвердите вашу новую почту",
+    html: `<p>Подтвердите, перейдя по ссылке: <a href="${verifyLink}">${verifyLink}</a></p>`
+  });
+}
       user.emailVerificationToken = uuidv4();
 
       const confirmUrl = `https://makadamia-e0hb.onrender.com/confirm-email-change/${user.emailVerificationToken}`;
