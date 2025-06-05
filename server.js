@@ -148,30 +148,10 @@ app.post("/update-account", protect, async (req, res) => {
       const exists = await User.findOne({ email, _id: { $ne: user._id } });
       if (exists) return res.status(400).json({ message: "Этот email уже используется" });
 
-if (email && email !== user.email) {
-  // проверка уникальности
-  const exists = await User.findOne({ email });
-  if (exists) {
-    return res.status(400).json({ message: "Этот email уже используется" });
-  }
-
-  user.pendingEmail = email;
-
-  const token = crypto.randomBytes(32).toString("hex");
-  user.emailVerificationToken = token;
-  user.emailVerificationExpires = Date.now() + 3600000;
-
-  const verifyLink = `${user.site || "https://makadamia-app-etvs.onrender.com"}/verify-email?token=${token}&email=${email}`;
-
-  await transporter.sendMail({
-    to: email,
-    subject: "Подтвердите вашу новую почту",
-    html: `<p>Подтвердите, перейдя по ссылке: <a href="${verifyLink}">${verifyLink}</a></p>`
-  });
-}
+      user.pendingEmail = email;
       user.emailVerificationToken = uuidv4();
 
-      const confirmUrl = `https://makadamia-e0hb.onrender.com/confirm-email-change/${user.emailVerificationToken}`;
+      const confirmUrl = `https://https://makadamia-app-etvs.onrender.com/confirm-email-change/${user.emailVerificationToken}`;
       await sendEmail(email, "Подтвердите новую почту", `Перейдите по ссылке для подтверждения: <a href="${confirmUrl}">${confirmUrl}</a>`);
 
       await user.save();
@@ -193,26 +173,7 @@ app.get('/api/products', async (req, res) => {
         res.status(500).json({ message: "Ошибка получения списка продуктов" });
     }
 });
-// 📩 Подтверждение нового email
-app.get("/confirm-email-change/:token", async (req, res) => {
-  try {
-    const user = await User.findOne({ emailVerificationToken: req.params.token });
-    if (!user || !user.pendingEmail) {
-      return res.status(400).send("Ссылка недействительна или устарела.");
-    }
 
-    user.email = user.pendingEmail;
-    user.pendingEmail = undefined;
-    user.emailVerificationToken = undefined;
-    user.emailVerified = true;
-    await user.save();
-
-    res.send("✅ Почта успешно подтверждена. Теперь вы можете войти.");
-  } catch (err) {
-    console.error("Ошибка подтверждения email:", err);
-    res.status(500).send("Ошибка сервера");
-  }
-});
 // Получение всех заказов
 app.get('/orders', async (req, res) => {
     try {
