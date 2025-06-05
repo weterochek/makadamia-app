@@ -1382,9 +1382,10 @@ function loadUserData() {
     const additionalInfoInput = document.getElementById("additionalInfo");
 
     const userData = JSON.parse(localStorage.getItem("userData")) || {};
-    if (!userData.emailVerified) {
+if (user.pendingEmail) {
   const warning = document.getElementById("emailWarning");
-  if (warning) warning.style.display = "block";
+  warning.textContent = `⚠️ Новый email (${user.pendingEmail}) не подтверждён. Используется ${user.email}`;
+  warning.style.display = "block";
 }
 
     if (customerNameInput) customerNameInput.value = userData.name || "";
