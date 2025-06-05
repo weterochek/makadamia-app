@@ -1103,6 +1103,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ Обработчик Сохранить — НАВЕШИВАЕТСЯ ВСЕГДА, один раз
   if (saveEmail && emailInput) {
     saveEmail.addEventListener("click", async () => {
+  if (saveEmail.disabled) return; // ⚠️ Защита от повторного нажатия
+
   const email = emailInput.value;
 
   if (emailInput.disabled) {
@@ -1110,8 +1112,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // 🔒 Отключаем кнопку, чтобы не кликали дважды
-  saveEmail.disabled = true;
+  saveEmail.disabled = true; // 🔒 Блокируем кнопку
   showStatus("⏳ Отправка письма подтверждения...");
 
   try {
@@ -1128,8 +1129,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (res.status === 429) {
       const result = await res.json();
-      showStatus(result.message || "⏱ Повторная отправка доступна через минуту", "error");
-      saveEmail.disabled = false; // снова активна
+      showStatus(result.message || "⏱ Повторная отправка возможна через минуту", "error");
+      saveEmail.disabled = false;
       return;
     }
 
@@ -1151,7 +1152,8 @@ document.addEventListener("DOMContentLoaded", () => {
   } catch (err) {
     console.error("❌ Ошибка:", err);
     showStatus("❌ Не удалось отправить письмо", "error");
-    saveEmail.disabled = false;
+  } finally {
+    saveEmail.disabled = false; // 🔓 Разблокируем кнопку
   }
 });
   }
@@ -1694,9 +1696,8 @@ function displayFilteredReviews(reviews) {
         el.className = 'review';
 
         const rating = parseInt(review.rating) || 0;
-        const stars =  repeat(rating) + repeat(5 - rating);
+        const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);  // ✅ вот это работает правильно
         const date = new Date(review.date).toLocaleDateString('ru-RU');
-
         const name = review.displayName || review.username || 'Анонимный пользователь';
 
         el.innerHTML = `
@@ -1710,6 +1711,7 @@ function displayFilteredReviews(reviews) {
         container.appendChild(el);
     });
 }
+
 
 // Функция обновления пагинации
 function updatePagination() {
