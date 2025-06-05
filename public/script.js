@@ -1342,19 +1342,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const saveEmail = document.getElementById("saveEmail");
   const emailInput = document.getElementById("emailInput");
 
-  if (editEmail && saveEmail && emailInput) {
-    editEmail.addEventListener("click", () => {
-      emailInput.disabled = false;
-      saveEmail.style.display = "inline-block";
-    });
-
-    saveEmail.addEventListener("click", async () => {
-      const email = emailInput.value;
-      
-      emailInput.disabled = true;
-      saveEmail.style.display = "none";
-    });
-  }
 });
 
 async function updateAccount(newUsername, newPassword) {
