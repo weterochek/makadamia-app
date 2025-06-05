@@ -371,16 +371,11 @@ await newUser.save();
 
 const verifyUrl = `https://makadamia-app-etvs.onrender.com/verify-email?token=${token}&email=${email}`;
 
-await transporter.sendMail({
-  from: '"Makadamia" <seryojabaulin25@gmail.com>',
-  to: email,
-  subject: "Подтверждение почты",
-  html: `
-    <h2>Подтвердите вашу почту</h2>
-    <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить email.</p>
-    <p><small>Срок действия ссылки — 24 часа.</small></p>
-  `
-});
+await sendEmail(email, "Подтверждение почты", `
+  <h2>Подтвердите вашу почту</h2>
+  <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить email.</p>
+  <p><small>Срок действия ссылки — 24 часа.</small></p>
+`);
 
 return res.status(201).json({
   message: 'Письмо для подтверждения отправлено на почту. Подтвердите, чтобы войти.'
