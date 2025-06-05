@@ -1054,7 +1054,7 @@ setInterval(async () => {
     document.getElementById("saveEmail").style.display = "inline-block";
   });
 
-  document.getElementById("saveEmail").addEventListener("click", async () => {
+ document.getElementById("saveEmail").addEventListener("click", async () => {
   const email = document.getElementById("emailInput").value;
 
   try {
@@ -1070,23 +1070,27 @@ setInterval(async () => {
     });
 
     const result = await res.json();
-    console.log("✅ Данные успешно обновлены:", result);
-    window.user = result;
 
-    if (window.user && !window.user.emailVerified) {
-      const warning = document.createElement("p");
-      warning.textContent = "⚠️ Ваша почта не подтверждена. Проверьте письмо.";
-      warning.style.color = "red";
-      document.querySelector(".account-container").prepend(warning);
+    alert("📨 На почту отправлено письмо с подтверждением. Подтвердите, чтобы завершить смену email.");
+
+    // Возвращаем старую почту (пока новая не подтверждена)
+    document.getElementById("emailInput").value = result.email;
+
+    // Отображаем предупреждение
+    const warning = document.getElementById("emailWarning");
+    if (warning) {
+      warning.textContent = `⚠️ Новый email (${email}) ещё не подтверждён. Используется старая почта: ${result.email}`;
+      warning.style.display = "block";
     }
 
     document.getElementById("emailInput").disabled = true;
     document.getElementById("saveEmail").style.display = "none";
-  } catch (error) {
-    console.error("❌ Ошибка при обновлении email:", error);
-    alert("Ошибка при обновлении email");
+  } catch (err) {
+    console.error("❌ Ошибка:", err);
+    alert("❌ Ошибка при обновлении email. Попробуйте позже.");
   }
 });
+
 
     
   const exp = getTokenExp(token);
