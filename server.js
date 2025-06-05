@@ -86,16 +86,19 @@ app.use((req, res, next) => {
 
 const Cart = require("./models/Cart"); // Подключаем модель
 app.get("/api/account", protect, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("username city email");
-    if (!user) return res.status(404).json({ message: "Пользователь не найден" });
+  const user = req.user; // req.user подставляется из middleware `protect`
 
-    res.json(user);
-  } catch (err) {
-    console.error("Ошибка получения аккаунта:", err);
-    res.status(500).json({ message: "Ошибка сервера" });
+  if (!user) {
+    return res.status(401).json({ message: "Пользователь не найден" });
   }
+
+  res.json({
+    username: user.username,
+    email: user.email,
+    city: user.city,
+  });
 });
+
 app.post('/cart/add', protect, async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
