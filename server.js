@@ -184,24 +184,21 @@ app.post("/account/email-change", protect, async (req, res) => {
   const user = await User.findById(userId);
   if (!user) return res.status(404).json({ message: "User not found" });
 
-  user.pendingEmail = email;
-  user.emailVerified = false;
-
   const token = crypto.randomBytes(32).toString("hex");
-  user.emailVerificationToken = token;
-  user.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
 
-  const verifyUrl = `https://makadamia-app-etvs.onrender.com/verify-email?token=${token}&email=${email}`;
+user.pendingEmail = email;
+user.emailVerificationToken = token;
+user.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000; // 24ч
 
-  await sendEmail(
-  email,
-  "Подтверждение нового email",
-  `
-    <h2>Подтвердите новую почту</h2>
-    <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить email: <b>${email}</b>.</p>
-    <p><small>Срок действия — 24 часа.</small></p>
-  `
-);
+await user.save();
+
+const verifyUrl = `https://makadamia-app-etvs.onrender.com/verify-email?token=${token}&email=${email}`;
+
+await sendEmail(email, "Подтверждение нового email", `
+  <h2>Подтвердите новую почту</h2>
+  <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить email: <b>${email}</b>.</p>
+  <p><small>Срок действия — 24 часа.</small></p>
+`);
 
   await user.save();
   res.json({ email: user.email }); // ← возвращаем старый email
