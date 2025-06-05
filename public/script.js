@@ -1091,16 +1091,15 @@ setInterval(async () => {
     document.getElementById("saveEmail").style.display = "inline-block";
   });
 
-document.getElementById("saveEmail").addEventListener("click", async () => {
-  const email = document.getElementById("emailInput").value;
+saveEmail.addEventListener("click", async () => {
+  const email = emailInput.value;
 
   try {
     const token = localStorage.getItem("accessToken");
-    if (res.status === 429) {
-  const result = await res.json();
-  alert(result.message || "⏱ Повторный запрос доступен через минуту.");
-  return;
-}
+
+    // Показ уведомления о процессе
+    showStatus("⏳ Отправка письма подтверждения...");
+
     const res = await fetch("/account/email-change", {
       method: "POST",
       headers: {
@@ -1110,30 +1109,51 @@ document.getElementById("saveEmail").addEventListener("click", async () => {
       body: JSON.stringify({ email })
     });
 
-    const result = await res.json(); // ← БЫЛО: response.json() (ошибка!)
-    console.log("✅ Данные успешно обновлены:", result);
+    if (res.status === 429) {
+      const result = await res.json();
+      showStatus(result.message || "⏱ Повторная отправка возможна через минуту.", "error");
+      return;
+    }
 
-    alert("📨 На почту отправлено письмо с подтверждением. Подтвердите, чтобы завершить смену email.");
+    const result = await res.json();
 
-    // Показываем предупреждение
+    showStatus("📨 Письмо с подтверждением отправлено. Проверьте почту.", "success");
+
     const warning = document.getElementById("emailWarning");
     if (warning) {
       warning.textContent = `⚠️ Новый email (${email}) ещё не подтверждён. Используется ${result.email}`;
       warning.style.display = "block";
     }
 
-    // Возвращаем старую почту (пока новая не подтверждена)
-    document.getElementById("emailInput").value = result.email;
-
-    document.getElementById("emailInput").disabled = true;
-    document.getElementById("saveEmail").style.display = "none";
+    emailInput.value = result.email;
+    emailInput.disabled = true;
+    saveEmail.style.display = "none";
   } catch (err) {
     console.error("❌ Ошибка обновления email:", err);
-    alert("❌ Не удалось обновить email. Попробуйте позже.");
+    showStatus("❌ Не удалось отправить письмо. Попробуйте позже.", "error");
   }
 });
+    function showStatus(message, type = "info") {
+  const el = document.getElementById("statusMessage");
+  if (!el) return;
 
-    
+  el.textContent = message;
+  el.style.display = "block";
+
+  // Стили по типу
+  if (type === "error") {
+    el.style.color = "red";
+  } else if (type === "success") {
+    el.style.color = "green";
+  } else {
+    el.style.color = "#333";
+  }
+
+  // Авто-скрытие через 6 секунд
+  setTimeout(() => {
+    el.style.display = "none";
+  }, 6000);
+}
   const exp = getTokenExp(token);
   const now = Math.floor(Date.now() / 1000);
 
