@@ -180,7 +180,9 @@ if (path.includes("index.html") || path === "/" || path.includes("national cuisi
 }
 document.addEventListener("DOMContentLoaded", async () => {
     console.log("🔄 Дополнительная проверка токена после загрузки DOM...");
-
+    if (user.pendingEmail) {
+  document.getElementById("resendEmailButton").style.display = "inline-block";
+}
     if (localStorage.getItem("logoutFlag") === "true") {
         console.warn("⛔ DOMContentLoaded: пользователь вышел — токен не обновляем");
         return;
@@ -192,6 +194,41 @@ document.addEventListener("DOMContentLoaded", async () => {
         await refreshAccessToken();
     }
 });
+const resendEmailButton = document.getElementById("resendEmailButton");
+
+if (resendEmailButton) {
+  resendEmailButton.addEventListener("click", async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+
+      const res = await fetch("/account/resend-verification", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const result = await res.json();
+
+      if (res.status === 429) {
+        alert(result.message || "⏱ Подождите перед повторной отправкой.");
+        return;
+      }
+
+      alert(result.message || "Письмо повторно отправлено!");
+
+      // можно скрыть кнопку или установить таймер здесь
+      resendEmailButton.disabled = true;
+      setTimeout(() => {
+        resendEmailButton.disabled = false;
+      }, 60 * 1000);
+
+    } catch (err) {
+      console.error("Ошибка повторной отправки:", err);
+      alert("❌ Ошибка при отправке письма.");
+    }
+  });
+}
 
 
 async function loadProductMap() {
