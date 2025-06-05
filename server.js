@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const { v4: uuidv4 } = require("uuid");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
@@ -17,7 +16,6 @@ const Order = require('./models/Order');
 const User = require('./models/User');
 const Product = require("./models/Products");  
 const Review = require('./models/Review');
-const sendEmail = require("./utils/sendEmail");
 
 
 
@@ -134,36 +132,40 @@ app.get('/s/:id', async (req, res) => {
     res.status(500).json({ message: 'Ошибка при получении товара' });
   }
 });
-// 🔐 Защищённое обновление имени, города и email
-app.post("/update-account", protect, async (req, res) => {
-  try {
-    const { name, city, email } = req.body;
-    const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ message: "Пользователь не найден" });
+app.post("/update-account", async (req, res) => {
+  const { userId, name, city, email } = req.body;
 
-    if (name !== undefined) user.name = name;
-    if (city !== undefined) user.city = city;
+  const user = await User.findById(userId);
+  if (!user) return res.status(404).json({ message: "Пользователь не найден" });
 
-    if (email !== undefined && email !== user.email) {
-      const exists = await User.findOne({ email, _id: { $ne: user._id } });
-      if (exists) return res.status(400).json({ message: "Этот email уже используется" });
+  user.name = name ?? user.name;
+  user.city = city ?? user.city;
 
-      user.pendingEmail = email;
-      user.emailVerificationToken = uuidv4();
+  // 👇 проверим, поменяли ли email
+  if (email && email !== user.email) {
+  user.pendingEmail = email;
+  user.emailVerified = false;
 
-      const confirmUrl = `https://https://makadamia-app-etvs.onrender.com/confirm-email-change/${user.emailVerificationToken}`;
-      await sendEmail(email, "Подтвердите новую почту", `Перейдите по ссылке для подтверждения: <a href="${confirmUrl}">${confirmUrl}</a>`);
+  const token = crypto.randomBytes(32).toString("hex");
+  user.emailVerificationToken = token;
+  user.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
 
-      await user.save();
-      return res.json({ message: "Письмо с подтверждением отправлено на новую почту." });
-    }
+  const verifyUrl = `https://makadamia-app-etvs.onrender.com/verify-email?token=${token}&email=${email}`;
 
-    await user.save();
-    res.json({ message: "Данные успешно обновлены" });
-  } catch (err) {
-    console.error("Ошибка обновления аккаунта:", err);
-    res.status(500).json({ message: "Ошибка на сервере" });
-  }
+  await transporter.sendMail({
+    from: '"Makadamia" <seryojabaulin25@gmail.com>',
+    to: email,
+    subject: "Подтверждение нового email",
+    html: `
+      <h2>Подтвердите новую почту</h2>
+      <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить email: <b>${email}</b>.</p>
+      <p><small>Срок действия — 24 часа.</small></p>
+    `
+  });
+}
+
+  await user.save();
+  res.json({ message: "Данные обновлены", user });
 });
 app.get('/api/products', async (req, res) => {
     try {
@@ -208,6 +210,29 @@ app.post("/api/order", protect, async (req, res) => {
         console.error("Ошибка при создании заказа:", error);
         res.status(500).json({ message: "Ошибка при создании заказа", error: error.message });
     }
+});
+//почта
+app.post("/update-email", protect, async (req, res) => {
+  const userId = req.user.id;
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json({ message: "Email обязателен" });
+
+  try {
+    const user = await User.findById(userId);
+    user.email = email;
+    await user.save();
+    res.status(200).json({ message: "Email обновлён" });
+  } catch (err) {
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+const transporter = nodemailer.createTransport({
+  service: "gmail", // или 'yandex', 'mail.ru', 'smtp.yourhost.com'
+  auth: {
+    user: "seryojabaulin25@gmail.com",     // ← ТВОЙ EMAIL
+    pass: "exwtwuflxjzonrpa"         // ← Пароль или App Password
+  }
 });
 app.post('/request-password-reset', async (req, res) => {
   const { email } = req.body;
@@ -533,6 +558,25 @@ app.get('/account', protect, async (req, res) => {
         console.error("Ошибка при загрузке аккаунта:", error);
         res.status(500).json({ message: "Ошибка сервера", error: error.message });
     }
+});
+app.put("/account", protect, async (req, res) => {
+  const { name, city, email, username, password } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "Пользователь не найден" });
+
+    if (name) user.name = name;
+    if (city) user.city = city;
+    if (email) user.email = email;
+    if (username) user.username = username;
+    if (password) user.password = await bcrypt.hash(password, 12);
+
+    await user.save();
+    res.json({ message: "Аккаунт обновлён", user });
+  } catch (error) {
+    res.status(500).json({ message: "Ошибка обновления", error: error.message });
+  }
 });
 // Обработка корневого маршрута
 app.get("/", (req, res) => {
