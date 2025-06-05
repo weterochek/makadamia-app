@@ -1119,7 +1119,12 @@ async function updateAccountField(data) {
         console.error("❌ Ошибка обновления данных:", error);
     }
 }
-
+if (!user.emailVerified) {
+  const warning = document.createElement("p");
+  warning.textContent = "⚠️ Ваша почта не подтверждена. Проверьте письмо.";
+  warning.style.color = "red";
+  document.querySelector(".account-container").prepend(warning);
+}
 document.getElementById('editName').addEventListener('click', () => {
     document.getElementById('nameInput').disabled = false;
     document.getElementById('saveName').style.display = 'inline-block';
