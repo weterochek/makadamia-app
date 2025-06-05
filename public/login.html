@@ -21,11 +21,15 @@
   <form>
     <input type="email" id="registerEmail" placeholder="Email" required />
 
-    <input type="text" id="registerUsername" placeholder="Имя пользователя"
-      <p id="usernameError" style="color: red; display: none; font-size: 14px;"></p>
-           pattern="^[a-zA-Z0-9_]+$"
-           title="Только буквы, цифры и подчёркивание"
-           required />
+    <input
+  type="text"
+  id="registerUsername"
+  placeholder="Имя пользователя"
+  pattern="^[a-zA-Z0-9_]+$"
+  title="Только буквы, цифры и подчёркивание"
+  required
+/>
+<p id="usernameError" style="color: red; display: none; font-size: 14px;"></p>
 
     <div class="password-wrapper">
       <input type="password" id="registerPassword" placeholder="Пароль" required />
