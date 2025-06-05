@@ -1102,6 +1102,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ Обработчик Сохранить — НАВЕШИВАЕТСЯ ВСЕГДА, один раз
   if (saveEmail && emailInput) {
+      console.log("📌 saveEmail обработчик навешан");
     saveEmail.addEventListener("click", async () => {
   if (saveEmail.disabled) return; // ⚠️ Защита от повторного нажатия
 
