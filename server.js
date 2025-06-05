@@ -177,7 +177,7 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-router.post("/account/email-change", protect, async (req, res) => {
+app.post("/account/email-change", protect, async (req, res) => {
   const { email } = req.body;
   const userId = req.user.id;
 
@@ -185,37 +185,27 @@ router.post("/account/email-change", protect, async (req, res) => {
   if (!user) return res.status(404).json({ message: "User not found" });
 
   user.pendingEmail = email;
+  user.emailVerified = false;
+
+  const token = crypto.randomBytes(32).toString("hex");
+  user.emailVerificationToken = token;
+  user.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
+
+  const verifyUrl = `https://makadamia-app-etvs.onrender.com/verify-email?token=${token}&email=${email}`;
+
+  await transporter.sendMail({
+    from: '"Makadamia" <seryojabaulin25@gmail.com>',
+    to: email,
+    subject: "Подтверждение нового email",
+    html: `
+      <h2>Подтвердите новую почту</h2>
+      <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить email: <b>${email}</b>.</p>
+      <p><small>Срок действия — 24 часа.</small></p>
+    `
+  });
+
   await user.save();
-
-  const token = jwt.sign({ id: userId, email }, EMAIL_SECRET, { expiresIn: "1h" });
-  const confirmUrl = `https://your-site.com/confirm-email?token=${token}`;
-
-  await sendEmail(email, "Подтверждение нового email", `
-    <p>Вы запросили смену email.</p>
-    <p>Нажмите <a href="${confirmUrl}">сюда</a>, чтобы подтвердить новый email.</p>
-  `);
-
-  return res.json({ email: user.email }); // возвращаем старый email
-});
-router.get("/confirm-email", async (req, res) => {
-  try {
-    const { token } = req.query;
-    const payload = jwt.verify(token, EMAIL_SECRET);
-    const user = await User.findById(payload.id);
-
-    if (!user || user.pendingEmail !== payload.email) {
-      return res.status(400).send("Ссылка недействительна или уже использована.");
-    }
-
-    user.email = user.pendingEmail;
-    user.pendingEmail = undefined;
-    user.emailVerified = true;
-    await user.save();
-
-    return res.send("✅ Email подтверждён. Вы можете вернуться на сайт.");
-  } catch (err) {
-    return res.status(400).send("Ошибка: ссылка недействительна или истекла.");
-  }
+  res.json({ email: user.email }); // ← возвращаем старый email
 });
 // Получение всех заказов
 app.get('/orders', async (req, res) => {
