@@ -1059,7 +1059,11 @@ document.getElementById("saveEmail").addEventListener("click", async () => {
 
   try {
     const token = localStorage.getItem("accessToken");
-
+    if (res.status === 429) {
+  const result = await res.json();
+  alert(result.message || "⏱ Повторный запрос доступен через минуту.");
+  return;
+}
     const res = await fetch("/account/email-change", {
       method: "POST",
       headers: {
