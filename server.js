@@ -119,6 +119,10 @@ app.post('/cart/add', protect, async (req, res) => {
 
 // Указание папки со статическими файлами
 app.use(express.static(path.join(__dirname, "public")));
+app.get('/reset-password', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'reset.html'));
+});
+
 
 // Маршрут для получения товара по ID
 app.get('/s/:id', async (req, res) => {
@@ -261,7 +265,8 @@ user.passwordResetToken = resetToken;
 user.passwordResetExpires = Date.now() + 60 * 60 * 1000; // 1 час
 await user.save();
 
-const resetLink = `https://makadamia-app-etvs.onrender.com/reset-password?token=${resetToken}&email=${email}`;
+const resetLink = `https://makadamia-app-etvs.onrender.com/reset.html?token=${token}`;
+
 
 await sendEmail(email, "Восстановление пароля", `
   <h2>Восстановление доступа</h2>
