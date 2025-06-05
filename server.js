@@ -133,6 +133,42 @@ app.get('/s/:id', async (req, res) => {
     res.status(500).json({ message: 'Ошибка при получении товара' });
   }
 });
+app.post("/account/resend-verification", protect, async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (!user) return res.status(404).json({ message: "Пользователь не найден" });
+
+  const now = Date.now();
+  const lastSent = user.emailVerificationLastSent || 0;
+
+  if (!user.pendingEmail) {
+    return res.status(400).json({ message: "Нет неподтверждённого email." });
+  }
+
+  if (now - lastSent < 60 * 1000) {
+    return res.status(429).json({
+      message: "⏱ Повторная отправка доступна через минуту."
+    });
+  }
+
+  const token = crypto.randomBytes(32).toString("hex");
+
+  user.emailVerificationToken = token;
+  user.emailVerificationExpires = now + 24 * 60 * 60 * 1000;
+  user.emailVerificationLastSent = now;
+
+  await user.save();
+
+  const verifyUrl = `https://makadamia-app-etvs.onrender.com/verify-email?token=${token}&email=${user.pendingEmail}`;
+
+  await sendEmail(user.pendingEmail, "Подтверждение нового email", `
+    <h2>Подтвердите новую почту</h2>
+    <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить email: <b>${user.pendingEmail}</b>.</p>
+    <p><small>Срок действия — 24 часа.</small></p>
+  `);
+
+  return res.json({ message: "📨 Письмо отправлено повторно." });
+});
+
 app.post("/update-account", async (req, res) => {
   const { userId, name, city, email } = req.body;
 
