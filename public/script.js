@@ -1176,17 +1176,15 @@ async function checkAuthStatus() {
 
     const authButton = document.getElementById("authButton");
     const cabinetButton = document.getElementById("cabinetButton");
+    
 
     if (!authButton || !cabinetButton) return;
 
     try {
-        const res = await fetch("/account", {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            credentials: "include"
-        });
+const response = await fetch("/api/account", {
+    headers: { Authorization: `Bearer ${token}` }
+});
+const user = await response.json();
 
         if (res.ok) {
             console.log("✅ Пользователь авторизован");
