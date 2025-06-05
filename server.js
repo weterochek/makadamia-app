@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const { v4: uuidv4 } = require("uuid");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
@@ -16,6 +17,7 @@ const Order = require('./models/Order');
 const User = require('./models/User');
 const Product = require("./models/Products");  
 const Review = require('./models/Review');
+const sendEmail = require("./utils/sendEmail");
 
 
 
