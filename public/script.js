@@ -1338,15 +1338,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // 🎯 Email редактирование
-  const editEmail = document.getElementById("editEmail");
-  const saveEmail = document.getElementById("saveEmail");
-  const emailInput = document.getElementById("emailInput");
-    editEmail.addEventListener("click", () => {
-  emailInput.disabled = false;
-  saveEmail.style.display = "inline-block";
-});
+const editEmail = document.getElementById("editEmail");
+const saveEmail = document.getElementById("saveEmail");
+const emailInput = document.getElementById("emailInput");
 
-});
+if (editEmail && saveEmail && emailInput) {
+  editEmail.addEventListener("click", () => {
+    emailInput.disabled = false;
+    saveEmail.style.display = "inline-block";
+  });
+}})
 
 async function updateAccount(newUsername, newPassword) {
   const token = localStorage.getItem("accessToken");
