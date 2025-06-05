@@ -1,27 +1,27 @@
 const nodemailer = require("nodemailer");
 
-async function sendEmail(to, subject, htmlText) {
+const sendEmail = async (to, subject, html) => {
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER, // укажи в .env файл
-        pass: process.env.EMAIL_PASS  // пароль от почты или app password
-      }
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
     });
 
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: `"Makadamia" <${process.env.EMAIL_USER}>`,
       to,
       subject,
-      html: htmlText
+      html,
     });
 
-    console.log("✅ Письмо успешно отправлено на:", to);
-  } catch (err) {
-    console.error("❌ Ошибка отправки письма:", err);
-    throw err;
+    console.log(`✅ Письмо отправлено на ${to}`);
+    console.log(`📧 Ответ сервера: ${info.response}`);
+  } catch (error) {
+    console.error("❌ Ошибка отправки письма:", error);
   }
-}
+};
 
 module.exports = sendEmail;
