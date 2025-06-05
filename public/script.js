@@ -1056,7 +1056,7 @@ function isTokenExpired(token) {
 
 
 // ⏳ Автообновление accessToken каждые 25 минут
-setInterval(() => {
+setInterval(async () => {
   fetch("/refresh", {
     method: "POST",
     credentials: "include"
@@ -1081,10 +1081,6 @@ setInterval(async () => {
     await refreshAccessToken();
     return;
   }
-
-// ✅ Объявление функции отдельно
-// 1. СНАЧАЛА объявляем функцию
-
 
   document.getElementById("editEmail")?.addEventListener("click", () => {
     document.getElementById("emailInput").disabled = false;
@@ -1175,18 +1171,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Авто-скрытие через 6 секунд
-  setTimeout(() => {
-    el.style.display = "none";
-  }, 6000);
-}
+  setTimeout(async () => {
+const token = localStorage.getItem("accessToken");
   const exp = getTokenExp(token);
   const now = Math.floor(Date.now() / 1000);
 
   if (!exp || (exp - now) < 300) {
     console.log("⏳ Access-токен истекает, обновляем...");
-    await refreshAccessToken();
+    await refreshAccessToken(); // ✅ теперь работает
   }
 }, 30000);
+    }
 
 function editField(field) {
     const input = document.getElementById(field + "Input");
