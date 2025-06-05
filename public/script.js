@@ -1069,19 +1069,25 @@ setInterval(async () => {
       body: JSON.stringify({ email })
     });
 
-   const result = await response.json();
-console.log("✅ Данные успешно обновлены:", result);
-window.user = result;
+    const result = await res.json();
+    console.log("✅ Данные успешно обновлены:", result);
+    window.user = result;
 
-if (window.user && !window.user.emailVerified) {
-  const warning = document.createElement("p");
-  warning.textContent = "⚠️ Ваша почта не подтверждена. Проверьте письмо.";
-  warning.style.color = "red";
-  document.querySelector(".account-container").prepend(warning);
-}
-  document.getElementById("emailInput").disabled = true;
-  document.getElementById("saveEmail").style.display = "none";
+    if (window.user && !window.user.emailVerified) {
+      const warning = document.createElement("p");
+      warning.textContent = "⚠️ Ваша почта не подтверждена. Проверьте письмо.";
+      warning.style.color = "red";
+      document.querySelector(".account-container").prepend(warning);
+    }
+
+    document.getElementById("emailInput").disabled = true;
+    document.getElementById("saveEmail").style.display = "none";
+  } catch (error) {
+    console.error("❌ Ошибка при обновлении email:", error);
+    alert("Ошибка при обновлении email");
+  }
 });
+
     
   const exp = getTokenExp(token);
   const now = Math.floor(Date.now() / 1000);
