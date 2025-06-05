@@ -16,7 +16,7 @@ const Order = require('./models/Order');
 const User = require('./models/User');
 const Product = require("./models/Products");  
 const Review = require('./models/Review');
-
+const sendEmail = require("./utils/sendEmail");
 
 
 // Настройка CORS
@@ -193,16 +193,15 @@ app.post("/account/email-change", protect, async (req, res) => {
 
   const verifyUrl = `https://makadamia-app-etvs.onrender.com/verify-email?token=${token}&email=${email}`;
 
-  await transporter.sendMail({
-    from: '"Makadamia" <seryojabaulin25@gmail.com>',
-    to: email,
-    subject: "Подтверждение нового email",
-    html: `
-      <h2>Подтвердите новую почту</h2>
-      <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить email: <b>${email}</b>.</p>
-      <p><small>Срок действия — 24 часа.</small></p>
-    `
-  });
+  await sendEmail(
+  email,
+  "Подтверждение нового email",
+  `
+    <h2>Подтвердите новую почту</h2>
+    <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить email: <b>${email}</b>.</p>
+    <p><small>Срок действия — 24 часа.</small></p>
+  `
+);
 
   await user.save();
   res.json({ email: user.email }); // ← возвращаем старый email
