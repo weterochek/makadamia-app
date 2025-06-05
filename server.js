@@ -173,7 +173,26 @@ app.get('/api/products', async (req, res) => {
         res.status(500).json({ message: "Ошибка получения списка продуктов" });
     }
 });
+// 📩 Подтверждение нового email
+app.get("/confirm-email-change/:token", async (req, res) => {
+  try {
+    const user = await User.findOne({ emailVerificationToken: req.params.token });
+    if (!user || !user.pendingEmail) {
+      return res.status(400).send("Ссылка недействительна или устарела.");
+    }
 
+    user.email = user.pendingEmail;
+    user.pendingEmail = undefined;
+    user.emailVerificationToken = undefined;
+    user.emailVerified = true;
+    await user.save();
+
+    res.send("✅ Почта успешно подтверждена. Теперь вы можете войти.");
+  } catch (err) {
+    console.error("Ошибка подтверждения email:", err);
+    res.status(500).send("Ошибка сервера");
+  }
+});
 // Получение всех заказов
 app.get('/orders', async (req, res) => {
     try {
