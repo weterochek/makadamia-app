@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema({
   emailVerified: { type: Boolean, default: false },
   emailVerificationToken: String,
   emailVerificationExpires: Date,
-  pendingEmail: { type: String, default: null }
+  pendingEmail: { type: String, default: null },
+  emailVerificationLastSent: { type: Number, default: 0 }
 });
 
 
