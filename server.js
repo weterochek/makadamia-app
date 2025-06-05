@@ -248,29 +248,6 @@ app.post("/api/order", protect, async (req, res) => {
         res.status(500).json({ message: "Ошибка при создании заказа", error: error.message });
     }
 });
-//почта
-app.post("/update-email", protect, async (req, res) => {
-  const userId = req.user.id;
-  const { email } = req.body;
-
-  if (!email) return res.status(400).json({ message: "Email обязателен" });
-
-  try {
-    const user = await User.findById(userId);
-    user.email = email;
-    await user.save();
-    res.status(200).json({ message: "Email обновлён" });
-  } catch (err) {
-    res.status(500).json({ message: "Ошибка сервера" });
-  }
-});
-const transporter = nodemailer.createTransport({
-  service: "gmail", // или 'yandex', 'mail.ru', 'smtp.yourhost.com'
-  auth: {
-    user: "seryojabaulin25@gmail.com",     // ← ТВОЙ EMAIL
-    pass: "exwtwuflxjzonrpa"         // ← Пароль или App Password
-  }
-});
 app.post('/request-password-reset', async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
@@ -605,7 +582,6 @@ app.put("/account", protect, async (req, res) => {
 
     if (name) user.name = name;
     if (city) user.city = city;
-    if (email) user.email = email;
     if (username) user.username = username;
     if (password) user.password = await bcrypt.hash(password, 12);
 
