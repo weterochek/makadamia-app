@@ -1054,33 +1054,37 @@ setInterval(async () => {
     document.getElementById("saveEmail").style.display = "inline-block";
   });
 
- document.getElementById("saveEmail").addEventListener("click", async () => {
-  const newEmail = document.getElementById("emailInput").value;
-  const userId = localStorage.getItem("userId");
+  document.getElementById("saveEmail").addEventListener("click", async () => {
+  const email = document.getElementById("emailInput").value;
 
   try {
-    const res = await fetch("/update-account", {
+    const token = localStorage.getItem("accessToken");
+
+    const res = await fetch("/account/email-change", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, email: newEmail })
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ email })
     });
 
-    const data = await res.json();
+    const result = await res.json();
 
-    if (res.ok) {
-      alert("📨 Письмо отправлено. Подтвердите смену почты по ссылке.");
-      document.getElementById("saveEmail").style.display = "none";
-      document.getElementById("editEmail").style.display = "inline-block";
-      document.getElementById("emailInput").disabled = true;
-    } else {
-      alert(data.message || "Ошибка смены email");
+    if (!res.ok) {
+      alert(result.message || "Ошибка при смене почты.");
+      return;
     }
-  } catch (err) {
-    console.error("Ошибка смены email:", err);
-    alert("Произошла ошибка при попытке сменить почту.");
-  }
-});
 
+    alert("📨 Письмо с подтверждением отправлено на новую почту!");
+  } catch (error) {
+    console.error("Ошибка смены email:", error);
+    alert("Произошла ошибка при смене почты.");
+  }
+
+  document.getElementById("emailInput").disabled = true;
+  document.getElementById("saveEmail").style.display = "none";
+});
     
   const exp = getTokenExp(token);
   const now = Math.floor(Date.now() / 1000);
@@ -1374,9 +1378,6 @@ function loadUserData() {
     if (!userData.emailVerified) {
   const warning = document.getElementById("emailWarning");
   if (warning) warning.style.display = "block";
-}
-    if (!user.emailVerified) {
-  document.getElementById("emailWarning").style.display = "block";
 }
 
     if (customerNameInput) customerNameInput.value = userData.name || "";
