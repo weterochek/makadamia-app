@@ -1626,8 +1626,13 @@ async function loadReviews() {
 const dateFilter = document.getElementById("filterDate");
 
 if (starsFilter && dateFilter) {
-    starsFilter.addEventListener("change", applyFilters);
-    dateFilter.addEventListener("change", applyFilters);
+    // Добавляем обработчики, НО вызываем applyFilters() только если allReviews уже загружены
+    starsFilter.addEventListener("change", () => {
+        if (allReviews.length > 0) applyFilters();
+    });
+    dateFilter.addEventListener("change", () => {
+        if (allReviews.length > 0) applyFilters();
+    });
 }
     } catch (error) {
         console.error('Ошибка при загрузке отзывов:', error);
@@ -1651,6 +1656,11 @@ function updateReviewSummary() {
 }
 
 function applyFilters() {
+    if (!Array.isArray(allReviews) || allReviews.length === 0) {
+        console.warn("⛔ Нечего фильтровать: allReviews пуст");
+        return;
+    }
+
     const starValue = document.getElementById("filterStars").value;
     const dateValue = document.getElementById("filterDate").value;
     
@@ -1668,6 +1678,7 @@ function applyFilters() {
 
     displayFilteredReviews(filtered);
 }
+
 
 function displayFilteredReviews(reviews) {
     const container = document.getElementById("reviewContainer");
