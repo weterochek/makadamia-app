@@ -424,11 +424,11 @@ app.get("/verify-email", async (req, res) => {
     return res.status(400).send("Некорректный запрос.");
   }
 
-  const user = await User.findOne({
-    email,
-    emailVerificationToken: token,
-    emailVerificationExpires: { $gt: Date.now() }
-  });
+const user = await User.findOne({
+  pendingEmail: email,
+  emailVerificationToken: token,
+  emailVerificationExpires: { $gt: Date.now() }
+});
 
   if (!user) {
     return res.status(400).send("Ссылка устарела или недействительна.");
