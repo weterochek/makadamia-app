@@ -1375,6 +1375,9 @@ function loadUserData() {
   const warning = document.getElementById("emailWarning");
   if (warning) warning.style.display = "block";
 }
+    if (!user.emailVerified) {
+  document.getElementById("emailWarning").style.display = "block";
+}
 
     if (customerNameInput) customerNameInput.value = userData.name || "";
     if (customerAddressInput) customerAddressInput.value = userData.address || "";
