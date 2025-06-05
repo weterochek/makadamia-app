@@ -1172,46 +1172,43 @@ document.getElementById('saveCity').addEventListener('click', async () => {
 });
 // Проверка состояния авторизации
 async function checkAuthStatus() {
-    const token = localStorage.getItem("accessToken");
+  console.log("[index.html] вызов checkAuthStatus при полной загрузке");
 
-    const authButton = document.getElementById("authButton");
-    const cabinetButton = document.getElementById("cabinetButton");
-    
+  const token = localStorage.getItem("accessToken");
+  if (!token) {
+    console.log("Нет токена — выход из аккаунта");
+    logout();
+    return;
+  }
 
-    if (!authButton || !cabinetButton) return;
+  try {
+    const res = await fetch("/api/account", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    try {
-const response = await fetch("/api/account", {
-    headers: { Authorization: `Bearer ${token}` }
-});
-const user = await response.json();
+    const data = await res.json();
+    console.log("Данные аккаунта:", data); // 👈 ДОБАВЬ ЭТУ СТРОКУ
 
-        if (res.ok) {
-            console.log("✅ Пользователь авторизован");
-            authButton.style.display = "none";
-            cabinetButton.style.display = "flex";
-            cabinetButton.onclick = () => {
-                window.location.href = "/account.html";
-            };
-        } else {
-            throw new Error("401 Unauthorized");
-        }
-    } catch (err) {
-        console.warn("🔄 Выход из аккаунта...");
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("userId");
-        localStorage.removeItem("username");
-        localStorage.removeItem("userData");
-        localStorage.setItem("logoutFlag", "true");
-
-        authButton.style.display = "flex";
-        cabinetButton.style.display = "none";
-
-        authButton.onclick = () => {
-            window.location.href = "/login.html";
-        };
+    if (!data || !data.username) {
+      console.log("Выход из аккаунта...");
+      logout();
+      return;
     }
+
+    // Здесь можешь отобразить имя пользователя, например:
+    const userInfo = document.getElementById("user-info");
+    if (userInfo) {
+      userInfo.textContent = `Привет, ${data.username}`;
+    }
+
+  } catch (error) {
+    console.error("Ошибка при проверке токена:", error);
+    logout();
+  }
 }
+
 window.addEventListener("load", () => {
   if (typeof checkAuthStatus === "function") {
     console.log("✅ checkAuthStatus вызван через window.load");
