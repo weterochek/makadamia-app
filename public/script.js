@@ -1091,47 +1091,72 @@ setInterval(async () => {
     document.getElementById("saveEmail").style.display = "inline-block";
   });
 
-saveEmail.addEventListener("click", async () => {
-  const email = emailInput.value;
+document.addEventListener("DOMContentLoaded", () => {
+  const editEmail = document.getElementById("editEmail");
+  const saveEmail = document.getElementById("saveEmail");
+  const emailInput = document.getElementById("emailInput");
 
-  try {
-    const token = localStorage.getItem("accessToken");
-
-    // Показ уведомления о процессе
-    showStatus("⏳ Отправка письма подтверждения...");
-
-    const res = await fetch("/account/email-change", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ email })
+  // Редактировать
+  if (editEmail && emailInput) {
+    editEmail.addEventListener("click", () => {
+      emailInput.disabled = false;
+      saveEmail.style.display = "inline-block";
     });
-
-    if (res.status === 429) {
-      const result = await res.json();
-      showStatus(result.message || "⏱ Повторная отправка возможна через минуту.", "error");
-      return;
-    }
-
-    const result = await res.json();
-
-    showStatus("📨 Письмо с подтверждением отправлено. Проверьте почту.", "success");
-
-    const warning = document.getElementById("emailWarning");
-    if (warning) {
-      warning.textContent = `⚠️ Новый email (${email}) ещё не подтверждён. Используется ${result.email}`;
-      warning.style.display = "block";
-    }
-
-    emailInput.value = result.email;
-    emailInput.disabled = true;
-    saveEmail.style.display = "none";
-  } catch (err) {
-    console.error("❌ Ошибка обновления email:", err);
-    showStatus("❌ Не удалось отправить письмо. Попробуйте позже.", "error");
   }
+
+  // ✅ Обработчик Сохранить — НАВЕШИВАЕТСЯ ВСЕГДА, один раз
+  if (saveEmail && emailInput) {
+    saveEmail.addEventListener("click", async () => {
+      const email = emailInput.value;
+
+      if (emailInput.disabled) {
+        showStatus("✋ Сначала нажмите «Редактировать»", "error");
+        return;
+      }
+
+      showStatus("⏳ Отправка письма подтверждения...");
+
+      try {
+        const token = localStorage.getItem("accessToken");
+
+        const res = await fetch("/account/email-change", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ email })
+        });
+
+        if (res.status === 429) {
+          const result = await res.json();
+          showStatus(result.message || "⏱ Повторная отправка доступна через минуту", "error");
+          return;
+        }
+
+        const result = await res.json();
+
+        showStatus("📨 Письмо отправлено. Подтвердите email.", "success");
+
+        emailInput.value = result.email;
+        emailInput.disabled = true;
+        saveEmail.style.display = "none";
+
+        const warning = document.getElementById("emailWarning");
+        if (warning) {
+          warning.textContent = `⚠️ Новый email (${email}) ещё не подтверждён. Используется ${result.email}`;
+          warning.style.display = "block";
+        }
+
+        const resend = document.getElementById("resendEmailButton");
+        if (resend) resend.style.display = "inline-block";
+      } catch (err) {
+        console.error("❌ Ошибка при обновлении email:", err);
+        showStatus("❌ Не удалось отправить письмо. Проверьте соединение.", "error");
+      }
+    });
+  }
+});
 });
     function showStatus(message, type = "info") {
   const el = document.getElementById("statusMessage");
