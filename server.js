@@ -49,6 +49,7 @@ app.use('/api', orderRoutes);
 const JWT_SECRET = process.env.JWT_SECRET || "ai3ohPh3Aiy9eeThoh8caaM9voh5Aezaenai0Fae2Pahsh2Iexu7Qu/";
 const mongoURI = process.env.MONGO_URI || "mongodb://11_ifelephant:ee590bdf579c7404d12fd8cf0990314242d56e62@axs-h.h.filess.io:27018/11_ifelephant";
 const REFRESH_SECRET = process.env.REFRESH_SECRET || "J8$GzP1d&KxT^m4YvNcR";
+const EMAIL_SECRET = process.env.EMAIL_SECRET || "acd2a2731fa3dcfed127e09da89a804e1caf9e0fb662ae018e46c372b3130246dd4218e44c3602e52367ac90e9b1831ecc380fcea8cd44f2c2a116996a42f8c3";
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -176,6 +177,46 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
+router.post("/account/email-change", protect, async (req, res) => {
+  const { email } = req.body;
+  const userId = req.user.id;
+
+  const user = await User.findById(userId);
+  if (!user) return res.status(404).json({ message: "User not found" });
+
+  user.pendingEmail = email;
+  await user.save();
+
+  const token = jwt.sign({ id: userId, email }, EMAIL_SECRET, { expiresIn: "1h" });
+  const confirmUrl = `https://your-site.com/confirm-email?token=${token}`;
+
+  await sendEmail(email, "Подтверждение нового email", `
+    <p>Вы запросили смену email.</p>
+    <p>Нажмите <a href="${confirmUrl}">сюда</a>, чтобы подтвердить новый email.</p>
+  `);
+
+  return res.json({ email: user.email }); // возвращаем старый email
+});
+router.get("/confirm-email", async (req, res) => {
+  try {
+    const { token } = req.query;
+    const payload = jwt.verify(token, EMAIL_SECRET);
+    const user = await User.findById(payload.id);
+
+    if (!user || user.pendingEmail !== payload.email) {
+      return res.status(400).send("Ссылка недействительна или уже использована.");
+    }
+
+    user.email = user.pendingEmail;
+    user.pendingEmail = undefined;
+    user.emailVerified = true;
+    await user.save();
+
+    return res.send("✅ Email подтверждён. Вы можете вернуться на сайт.");
+  } catch (err) {
+    return res.status(400).send("Ошибка: ссылка недействительна или истекла.");
+  }
+});
 // Получение всех заказов
 app.get('/orders', async (req, res) => {
     try {
