@@ -161,7 +161,7 @@ if (email && email !== user.email) {
   user.emailVerificationToken = token;
   user.emailVerificationExpires = Date.now() + 3600000;
 
-  const verifyLink = `${user.site || "https://makadamia-e0hb.onrender.com"}/verify-email?token=${token}&email=${email}`;
+  const verifyLink = `${user.site || "https://makadamia-app-etvs.onrender.com"}/verify-email?token=${token}&email=${email}`;
 
   await transporter.sendMail({
     to: email,
