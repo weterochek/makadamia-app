@@ -522,7 +522,26 @@ res.cookie("refreshTokenAPP", newRefreshToken, {
         }
     });
 });
+app.get('/refresh', async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: "Нет токена" });
 
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findOne({ username: decoded.username });
+
+    if (!user) return res.status(404).json({ message: "Пользователь не найден" });
+
+    res.json({
+      username: user.username,
+      email: user.email,
+      name: user.name,
+      city: user.city,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
 
 app.post('/logout', (req, res) => {
     console.log("🔄 Выход из аккаунта...");
