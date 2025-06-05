@@ -1069,19 +1069,16 @@ setInterval(async () => {
       body: JSON.stringify({ email })
     });
 
-    const result = await res.json();
+   const result = await response.json();
+console.log("✅ Данные успешно обновлены:", result);
+window.user = result;
 
-    if (!res.ok) {
-      alert(result.message || "Ошибка при смене почты.");
-      return;
-    }
-
-    alert("📨 Письмо с подтверждением отправлено на новую почту!");
-  } catch (error) {
-    console.error("Ошибка смены email:", error);
-    alert("Произошла ошибка при смене почты.");
-  }
-
+if (window.user && !window.user.emailVerified) {
+  const warning = document.createElement("p");
+  warning.textContent = "⚠️ Ваша почта не подтверждена. Проверьте письмо.";
+  warning.style.color = "red";
+  document.querySelector(".account-container").prepend(warning);
+}
   document.getElementById("emailInput").disabled = true;
   document.getElementById("saveEmail").style.display = "none";
 });
@@ -1144,7 +1141,7 @@ async function updateAccountField(data) {
         console.error("❌ Ошибка обновления данных:", error);
     }
 }
-if (!user.emailVerified) {
+if (window.user && !window.user.emailVerified) {
   const warning = document.createElement("p");
   warning.textContent = "⚠️ Ваша почта не подтверждена. Проверьте письмо.";
   warning.style.color = "red";
