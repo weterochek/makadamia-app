@@ -181,39 +181,37 @@ app.get('/api/products', async (req, res) => {
 
 app.post("/account/email-change", protect, async (req, res) => {
   const { email } = req.body;
-  const userId = req.user.id;
-
-  const user = await User.findById(userId);
+  const user = await User.findById(req.user.id);
   if (!user) return res.status(404).json({ message: "User not found" });
 
-  // Ограничение: не чаще 1 раза в минуту
   const now = Date.now();
-  const lastSent = user.emailVerificationLastSent || 0;
 
-  if (now - lastSent < 60 * 1000) {
-    return res.status(429).json({
-      message: "⏱ Повторная отправка письма возможна через 1 минуту."
-    });
+  // Защита от спама
+  if (now - (user.emailVerificationLastSent || 0) < 60 * 1000) {
+    return res.status(429).json({ message: "⏱ Повторная отправка доступна через минуту" });
   }
 
+  // 🟢 Генерируем токен ОДИН раз
   const token = crypto.randomBytes(32).toString("hex");
 
   user.pendingEmail = email;
   user.emailVerificationToken = token;
-  user.emailVerificationExpires = now + 24 * 60 * 60 * 1000; // 24 часа
+  user.emailVerificationExpires = now + 24 * 60 * 60 * 1000;
   user.emailVerificationLastSent = now;
 
+  // ⬇️ Сохраняем до отправки письма
   await user.save();
 
   const verifyUrl = `https://makadamia-app-etvs.onrender.com/verify-email?token=${token}&email=${email}`;
 
-  await sendEmail(email, "Подтверждение нового email", `
-    <h2>Подтвердите новую почту</h2>
-    <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить email: <b>${email}</b>.</p>
+  // 📨 Отправляем письмо ТОЛЬКО ПОСЛЕ сохранения
+  await sendEmail(email, "Подтверждение email", `
+    <h2>Подтвердите email</h2>
+    <p>Нажмите <a href="${verifyUrl}">сюда</a>, чтобы подтвердить ${email}</p>
     <p><small>Срок действия — 24 часа.</small></p>
   `);
 
-  res.json({ email: user.email }); // возвращаем старую (подтверждённую) почту
+  res.json({ email: user.email });
 });
 // Получение всех заказов
 app.get('/orders', async (req, res) => {
