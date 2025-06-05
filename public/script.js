@@ -1341,6 +1341,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const editEmail = document.getElementById("editEmail");
   const saveEmail = document.getElementById("saveEmail");
   const emailInput = document.getElementById("emailInput");
+    editEmail.addEventListener("click", () => {
+  emailInput.disabled = false;
+  saveEmail.style.display = "inline-block";
+});
 
 });
 
