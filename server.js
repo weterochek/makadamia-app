@@ -260,23 +260,24 @@ app.post('/request-password-reset', async (req, res) => {
     return res.status(404).json({ message: "Пользователь с этой почтой не найден" });
   }
 
- const resetToken = crypto.randomBytes(32).toString("hex");
-user.passwordResetToken = resetToken;
-user.passwordResetExpires = Date.now() + 60 * 60 * 1000; // 1 час
-await user.save();
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  user.resetToken = resetToken;
+  user.resetTokenExpiration = Date.now() + 15 * 60 * 1000; // 15 минут
+  await user.save();
 
-const resetLink = `https://makadamia-app-etvs.onrender.com/reset.html?token=${token}`;
+  const resetLink = `https://makadamia-e0hb.onrender.com/reset.html?token=${resetToken}`;
 
+  await sendEmail(user.email, "Восстановление пароля", `
+    <h3>Здравствуйте, ${user.username}!</h3>
+    <p>Вы запросили восстановление пароля на сайте Makadamia.</p>
+    <p>Перейдите по ссылке ниже, чтобы задать новый пароль:</p>
+    <a href="${resetLink}">${resetLink}</a>
+    <p><small>Ссылка активна в течение 15 минут.</small></p>
+  `);
 
-await sendEmail(email, "Восстановление пароля", `
-  <h2>Восстановление доступа</h2>
-  <p>Перейдите по ссылке, чтобы задать новый пароль:</p>
-  <p><a href="${resetLink}">${resetLink}</a></p>
-  <p><small>Срок действия ссылки — 1 час.</small></p>
-`);
-
-res.json({ message: "Письмо с ссылкой отправлено на почту" });
+  res.json({ message: "📨 Письмо со ссылкой отправлено на почту" });
 });
+
 app.post('/reset-password/:token', async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
