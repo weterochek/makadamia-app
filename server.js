@@ -265,7 +265,7 @@ app.post('/request-password-reset', async (req, res) => {
   user.resetTokenExpiration = Date.now() + 15 * 60 * 1000; // 15 минут
   await user.save();
 
-  const resetLink = `https://makadamia-e0hb.onrender.com/reset.html?token=${resetToken}`;
+  const resetLink = `https://makadamia-app-etvs.onrender.com/reset.html?token=${resetToken}`;
 
   await sendEmail(user.email, "Восстановление пароля", `
     <h3>Здравствуйте, ${user.username}!</h3>
